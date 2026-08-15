@@ -10,7 +10,7 @@ const PaginationContainer = styled.nav`
 
   margin: 32px auto 0;
 
-  transform: translateX(-160px);
+  transform: translateX(-80px);
 `;
 
 const PageButton = styled.button`
