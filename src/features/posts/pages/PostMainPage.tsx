@@ -8,7 +8,8 @@ import styled from "@emotion/styled";
 
 const PageContainer = styled.main`
   position: relative;
-
+  right: 170px;
+  top: 200px;
   width: 720px;
   margin: 40px auto;
 `;
@@ -16,10 +17,13 @@ const PageContainer = styled.main`
 // 정렬 메뉴를 게시글 콘텐츠 왼쪽에 배치
 const SortMenuArea = styled.aside`
   position: absolute;
-  top: 48px;
-  right: calc(100% + 24px);
+  top: 41px;
+
+  right: calc(100% + 60px);
 
   width: 80px;
+
+  padding: 20px;
 `;
 
 // 제목, 게시글 표, 페이지네이션 영역
@@ -35,6 +39,7 @@ const Title = styled.h1`
   font-weight: 600;
   line-height: 1.4;
 `;
+// Record<PostSort, string>: PostSort를 키로, string을 값으로 갖는 객체 타입
 function PostMainPage() {
   const [selectedSort, setSelectedSort] = useState<PostSort>("popular");
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,23 +51,28 @@ function PostMainPage() {
   };
 
   return (
-    <PageContainer>
-      <SortMenuArea>
-        <PostSortMenu selectedSort={selectedSort} onChange={setSelectedSort} />
-      </SortMenuArea>
+    <body>
+      <PageContainer>
+        <SortMenuArea>
+          <PostSortMenu
+            selectedSort={selectedSort}
+            onChange={setSelectedSort}
+          />
+        </SortMenuArea>
 
-      <Content>
-        <Title>{sortTitles[selectedSort]}</Title>
+        <Content>
+          <Title>{sortTitles[selectedSort]}</Title>
 
-        <PostTable posts={mockPosts} />
+          <PostTable posts={mockPosts} />
 
-        <PostPagination
-          currentPage={currentPage}
-          totalPages={10}
-          onChange={setCurrentPage}
-        />
-      </Content>
-    </PageContainer>
+          <PostPagination
+            currentPage={currentPage}
+            totalPages={10}
+            onChange={setCurrentPage}
+          />
+        </Content>
+      </PageContainer>
+    </body>
   );
 }
 

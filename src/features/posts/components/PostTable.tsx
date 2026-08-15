@@ -7,11 +7,13 @@ const Table = styled.table`
   height: 611px;
   table-layout: fixed;
   border-collapse: collapse;
+  background-color: #ffffff;
 
   //첫번째 열: 게시글 번호
   th:nth-of-type(1),
   td:nth-of-type(1) {
     width: 12%;
+    padding-left: 16px;
   }
 
   //두번째 열: 카테고리

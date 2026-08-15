@@ -1,18 +1,30 @@
 import type { PostSort } from "../types/post";
 import styled from "@emotion/styled";
 
+const SortNav = styled.nav`
+  position: relative;
+  bottom: 20px;
+  left: -20px;
+  width: 80px;
+  padding-top: 8px;
+  border-top: 2px solid #222222;
+`;
+
 const SortList = styled.ul`
   list-style: none;
 
   display: flex;
   flex-direction: column;
-
   gap: 8px;
 `;
 
-// 선택된 버튼은 굵게 표시
 const SortButton = styled.button<SortButtonProps>`
-  font-weight: ${({ isSelected }) => (isSelected ? 700 : 500)};
+  width: 100%;
+  padding: 0;
+
+  text-align: left;
+  font-size: 14px;
+  font-weight: ${({ isSelected }) => (isSelected ? 700 : 400)};
 `;
 
 // PostSortMenu 컴포넌트가 부모 컴포넌트한테 받아야하는 값의 타입 정의.
@@ -40,7 +52,7 @@ const sortOptions: SortOption[] = [
 
 function PostSortMenu({ selectedSort, onChange }: PostSortMenuProps) {
   return (
-    <nav aria-label="게시글 정렬">
+    <SortNav aria-label="게시글 정렬">
       <SortList>
         {sortOptions.map((option) => {
           const isSelected = selectedSort === option.value;
@@ -58,7 +70,7 @@ function PostSortMenu({ selectedSort, onChange }: PostSortMenuProps) {
           );
         })}
       </SortList>
-    </nav>
+    </SortNav>
   );
 }
 export default PostSortMenu;

@@ -3,32 +3,40 @@ import styled from "@emotion/styled";
 const PaginationContainer = styled.nav`
   width: 360px;
   height: 22px;
+
+  position: relative;
+  right: -130px;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  margin-top: 32px;
+
+  margin: 32px auto 0;
 `;
 
 const PageButton = styled.button`
+  width: 22px;
+  height: 22px;
+  padding: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 28px;
 
   color: #000000;
-  font-size: 14px;
+  font-size: 16px;
+  line-height: 1;
 
   &:hover:not(:disabled) {
     color: #577aed;
   }
 
   &[aria-current="page"] {
-    color: #ff0000;
+    color: #577aed;
     font-weight: 700;
   }
 
-  /* 비활성화된 이동 버튼 */
   &:disabled {
     color: #b0b0b0;
     cursor: not-allowed;
@@ -65,6 +73,7 @@ function PostPagination({
     { length: endPage - startPage + 1 },
     (_, index) => startPage + index,
   );
+
   return (
     <PaginationContainer aria-label="게시글 페이지 이동">
       <PageButton
