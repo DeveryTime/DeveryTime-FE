@@ -1,11 +1,7 @@
 import styled from "@emotion/styled";
-
 const PaginationContainer = styled.nav`
   width: 360px;
   height: 22px;
-
-  position: relative;
-  right: -130px;
 
   display: flex;
   align-items: center;
@@ -13,6 +9,8 @@ const PaginationContainer = styled.nav`
   gap: 4px;
 
   margin: 32px auto 0;
+
+  transform: translateX(-160px);
 `;
 
 const PageButton = styled.button`

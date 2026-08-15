@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 // 게시글 목록 테이블의 레이아웃과 번호·카테고리·제목·작성일 열의 너비 설정
 const Table = styled.table`
-  width: 1293px;
+  width: 100%;
   height: 611px;
   table-layout: fixed;
   border-collapse: collapse;
@@ -41,7 +41,7 @@ interface PostTableProps {
 
 const TableHeader = styled.th`
   padding: 6px 8px;
-  border-top: 1px solid #000000;
+  border-top: 3px solid #000000;
   text-align: left;
   font-weight: 500;
 `;

@@ -7,37 +7,29 @@ import type { PostSort } from "../types/post";
 import styled from "@emotion/styled";
 
 const PageContainer = styled.main`
-  position: relative;
-  right: 170px;
-  top: 200px;
-  width: 720px;
-  margin: 40px auto;
+  display: grid;
+  grid-template-columns: 130px 1293px;
+  column-gap: 56px;
+  align-items: start;
+
+  width: 1479px;
+  margin: 108px auto 0;
 `;
 
-// 정렬 메뉴를 게시글 콘텐츠 왼쪽에 배치
+// 정렬 메뉴를 테이블 시작 높이에 맞춤
 const SortMenuArea = styled.aside`
-  position: absolute;
-  top: 41px;
-
-  right: calc(100% + 60px);
-
-  width: 80px;
-
-  padding: 20px;
+  margin-top: 78px;
 `;
 
-// 제목, 게시글 표, 페이지네이션 영역
 const Content = styled.section`
-  width: 100%;
-  min-width: 0;
+  width: 1293px;
 `;
 
-// 현재 선택된 정렬 제목
 const Title = styled.h1`
-  margin: 0 0 8px;
-  font-size: 24px;
+  margin: 0 0 16px;
+  font-size: 48px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.3;
 `;
 // Record<PostSort, string>: PostSort를 키로, string을 값으로 갖는 객체 타입
 function PostMainPage() {
@@ -51,28 +43,23 @@ function PostMainPage() {
   };
 
   return (
-    <body>
-      <PageContainer>
-        <SortMenuArea>
-          <PostSortMenu
-            selectedSort={selectedSort}
-            onChange={setSelectedSort}
-          />
-        </SortMenuArea>
+    <PageContainer>
+      <SortMenuArea>
+        <PostSortMenu selectedSort={selectedSort} onChange={setSelectedSort} />
+      </SortMenuArea>
 
-        <Content>
-          <Title>{sortTitles[selectedSort]}</Title>
+      <Content>
+        <Title>{sortTitles[selectedSort]}</Title>
 
-          <PostTable posts={mockPosts} />
+        <PostTable posts={mockPosts} />
 
-          <PostPagination
-            currentPage={currentPage}
-            totalPages={10}
-            onChange={setCurrentPage}
-          />
-        </Content>
-      </PageContainer>
-    </body>
+        <PostPagination
+          currentPage={currentPage}
+          totalPages={10}
+          onChange={setCurrentPage}
+        />
+      </Content>
+    </PageContainer>
   );
 }
 

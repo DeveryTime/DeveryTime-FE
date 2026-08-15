@@ -3,11 +3,10 @@ import styled from "@emotion/styled";
 
 const SortNav = styled.nav`
   position: relative;
-  bottom: 20px;
-  left: -20px;
+  left: 10px
   width: 80px;
   padding-top: 8px;
-  border-top: 2px solid #222222;
+  border-top: 3px solid #222222;
 `;
 
 const SortList = styled.ul`
@@ -23,7 +22,7 @@ const SortButton = styled.button<SortButtonProps>`
   padding: 0;
 
   text-align: left;
-  font-size: 14px;
+  font-size: 22px;
   font-weight: ${({ isSelected }) => (isSelected ? 700 : 400)};
 `;
 
