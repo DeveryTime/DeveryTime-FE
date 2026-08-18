@@ -11,6 +11,7 @@ export const GlobalStyle = () => (
 
       body {
         font-family: Pretendard, sans-serif;
+        margin: 0;
       }
 
       a {
