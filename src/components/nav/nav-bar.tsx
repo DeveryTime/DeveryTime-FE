@@ -10,13 +10,13 @@ import {
   cateGory,
   navCatalog,
 } from "./nav-bar.styles";
-import logoIcon from "../icons/logoIcon.svg";
-import profile from "../icons/profile.svg";
+import logoIcon from "../../icons/logoIcon.svg";
+import profile from "../../icons/profile.svg";
 
 import { useState } from "react";
 
 const NavBar = () => {
-  const [signUp, setSignUp] = useState(ture);
+  const [signUp, setSignUp] = useState(false);
   return (
     <nav css={navStyle}>
       <div css={navGap}>
@@ -60,8 +60,12 @@ const NavBar = () => {
           <div>분실물</div>
         </div>
 
-        <div css={login}>
-          {signUp ? "로그인" : <img src={profile} alt="프로필"></img>}
+        <div>
+          {signUp ? (
+            <img src={profile} alt="프로필" />
+          ) : (
+            <button css={login}>로그인</button>
+          )}
         </div>
       </div>
     </nav>

@@ -1,4 +1,4 @@
-import NavBar from "./components/nav-bar";
+import NavBar from "./components/nav/nav-bar";
 import "./designToken/globalStyle";
 import { GlobalStyle } from "./designToken/globalStyle";
 

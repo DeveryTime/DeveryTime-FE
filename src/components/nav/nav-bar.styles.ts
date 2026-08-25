@@ -99,7 +99,7 @@ export const login = css`
   justify-content: center;
   padding: 9px 23px 10px 22px;
   color: black;
-  font-weight: 500;
+  font-weight: 500;x
   border: none;
   background-color: #fff;
   border-radius: 16px;
