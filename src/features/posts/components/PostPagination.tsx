@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+
 const PaginationContainer = styled.nav`
   width: 360px;
   height: 22px;

@@ -37,6 +37,7 @@ const Table = styled.table`
 
 interface PostTableProps {
   posts: PostListItemType[];
+  onPostClick: (postId: number) => void;
 }
 
 const TableHeader = styled.th`
@@ -52,7 +53,15 @@ const TableCell = styled.td`
   text-align: left;
 `;
 
-function PostTable({ posts }: PostTableProps) {
+const TableRow = styled.tr`
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+function PostTable({ posts, onPostClick }: PostTableProps) {
   return (
     <Table>
       <thead>
@@ -66,12 +75,12 @@ function PostTable({ posts }: PostTableProps) {
 
       <tbody>
         {posts.map((post) => (
-          <tr key={post.id}>
+          <TableRow key={post.id} onClick={() => onPostClick(post.id)}>
             <TableCell> {post.number} </TableCell>
             <TableCell> {post.category} </TableCell>
             <TableCell> {post.title} </TableCell>
             <TableCell> {post.createdAt} </TableCell>
-          </tr>
+          </TableRow>
         ))}
       </tbody>
     </Table>

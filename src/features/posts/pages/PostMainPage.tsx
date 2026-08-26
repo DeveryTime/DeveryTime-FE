@@ -5,6 +5,8 @@ import PostPagination from "../components/PostPagination";
 import { mockPosts } from "../data/mockPosts";
 import type { PostSort } from "../types/post";
 import styled from "@emotion/styled";
+import PostDetailModal from "../components/PostDetailModal";
+import { mockPostDetail } from "../data/mockPosts";
 
 const PageContainer = styled.main`
   display: grid;
@@ -31,13 +33,17 @@ const Title = styled.h1`
   font-weight: 600;
   line-height: 1.3;
 `;
+
 // Record<PostSort, string>: PostSort를 키로, string을 값으로 갖는 객체 타입
 function PostMainPage() {
-  const [selectedSort, setSelectedSort] = useState<PostSort>("popular");
+  const [selectedSort, setSelectedSort] = useState<PostSort>("likes");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
+  const selectedPost =
+    selectedPostId !== null ? mockPostDetail[selectedPostId] : null;
   const sortTitles: Record<PostSort, string> = {
-    popular: "인기순",
+    likes: "인기순",
     latest: "최신순",
     views: "조회순",
   };
@@ -51,8 +57,14 @@ function PostMainPage() {
       <Content>
         <Title>{sortTitles[selectedSort]}</Title>
 
-        <PostTable posts={mockPosts} />
+        <PostTable posts={mockPosts} onPostClick={setSelectedPostId} />
 
+        {selectedPost && (
+          <PostDetailModal
+            post={selectedPost}
+            onClose={() => setSelectedPostId(null)}
+          />
+        )}
         <PostPagination
           currentPage={currentPage}
           totalPages={10}

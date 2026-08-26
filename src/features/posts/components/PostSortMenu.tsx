@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 const SortNav = styled.nav`
   position: relative;
-  left: 10px
+  left: 10px;
   width: 80px;
   padding-top: 8px;
   border-top: 3px solid #222222;
@@ -44,10 +44,10 @@ interface SortOption {
 } // 정렬 메뉴 한 개의 형태
 
 const sortOptions: SortOption[] = [
-  { value: "popular", label: "인기순" },
+  { value: "likes", label: "인기순" },
   { value: "latest", label: "최신순" },
   { value: "views", label: "조회순" },
-]; // 실제 정렬 메뉴의 데이터
+];
 
 function PostSortMenu({ selectedSort, onChange }: PostSortMenuProps) {
   return (
