@@ -32,21 +32,19 @@ const PandaMotion = () => {
       <Zoom triggerOnce duration={600} fraction={1} css={panda2Css}>
         <img src={panda2} alt="panda" />
       </Zoom>
+      <Zoom triggerOnce duration={600} fraction={1} css={panda3Css}>
+        <img src={panda3} alt="panda" />
+      </Zoom>
 
       <Zoom
         triggerOnce
         duration={600}
         fraction={1}
-        delay={400}
+        delay={700}
         css={glitterCss}
       >
         <img src={glitter} alt="glitter" />
       </Zoom>
-
-      <Zoom triggerOnce duration={600} fraction={1} css={panda3Css}>
-        <img src={panda3} alt="panda" />
-      </Zoom>
-
       <Zoom triggerOnce duration={600} fraction={1} css={starCss2}>
         <img src={star} alt="star" />
       </Zoom>

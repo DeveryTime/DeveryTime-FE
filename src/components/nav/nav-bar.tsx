@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import {
   logoName,
   logo,
@@ -11,7 +13,7 @@ import {
   navCatalog,
 } from "./nav-bar.styles";
 import logoIcon from "../../icons/logoIcon.svg";
-import profile from "../../icons/profile.svg";
+import profile from "../../icons/porfile.svg";
 
 import { useState } from "react";
 

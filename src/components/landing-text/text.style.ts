@@ -40,6 +40,7 @@ export const startBtn = css`
   border-radius: 75px;
   background-color: #3469f9;
   padding: 32px 121px 33px 121px;
+  cursor: pointer;
   color: #fff;
   &:hover {
     background: #2855d9;
