@@ -20,7 +20,6 @@ import {
   PasswordWrapper,
   QuestionPasswordText,
 } from "./LoginPageStyle";
-// const APIURL = "/api/auth/signup";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -88,7 +87,7 @@ export const LoginPage = () => {
 
           <QuestionText>
             <Qusetion>계정이 없으신가요?</Qusetion>
-            <LinkText to="/signup">회원가입</LinkText>
+            <LinkText to="/signup/1">회원가입</LinkText>
           </QuestionText>
         </CardBox>
       </ContentLayer>
