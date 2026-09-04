@@ -3,7 +3,7 @@ import PostSortMenu from "../components/PostSortMenu";
 import PostTable from "../components/PostTable";
 import PostPagination from "../components/PostPagination";
 import { mockPosts } from "../data/mockPosts";
-import type { PostSort } from "../types/post";
+import type { PostListItemType, PostSort } from "../types/post";
 import styled from "@emotion/styled";
 import PostDetailModal from "../components/PostDetailModal";
 import { mockPostDetail } from "../data/mockPosts";
@@ -38,6 +38,7 @@ const Title = styled.h1`
 function PostMainPage() {
   const [selectedSort, setSelectedSort] = useState<PostSort>("likes");
   const [currentPage, setCurrentPage] = useState(1);
+  const [posts, setPosts] = useState<PostListItemType[]>(mockPosts);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
   const selectedPost =
@@ -48,6 +49,14 @@ function PostMainPage() {
     views: "조회순",
   };
 
+  function handlePostDelete(postId: number) {
+    setPosts((currentPosts) =>
+      currentPosts.filter((post) => post.id !== postId),
+    );
+
+    setSelectedPostId(null);
+  }
+
   return (
     <PageContainer>
       <SortMenuArea>
@@ -57,12 +66,13 @@ function PostMainPage() {
       <Content>
         <Title>{sortTitles[selectedSort]}</Title>
 
-        <PostTable posts={mockPosts} onPostClick={setSelectedPostId} />
+        <PostTable posts={posts} onPostClick={setSelectedPostId} />
 
         {selectedPost && (
           <PostDetailModal
             post={selectedPost}
             onClose={() => setSelectedPostId(null)}
+            onDelete={handlePostDelete}
           />
         )}
         <PostPagination

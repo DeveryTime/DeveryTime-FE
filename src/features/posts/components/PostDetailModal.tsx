@@ -1,268 +1,18 @@
 import type { PostDetailResponse } from "../types/post";
-import { useState, useRef, useEffect } from "react";
-import styled from "@emotion/styled";
-import { X, UserRound } from "lucide-react";
-import { mockPostComments } from "../data/mockPosts";
+import { useState, useRef, useEffect, type FormEvent } from "react";
+import S from "../../../styles/PostDetailModal.styles";
+import { X, UserRound, SendHorizontal } from "lucide-react";
 import commentIcon from "../../../assets/icons/comment.svg";
 import likeDefaultIcon from "../../../assets/icons/Like.svg";
 import likeActiveIcon from "../../../assets/icons/Like-active.svg";
 import KebabMenu from "../../../assets/icons/Kebab-menu.svg";
+import type { PostComment } from "../types/post";
 
 interface PostDetailModalProps {
   post: PostDetailResponse;
   onClose: () => void;
+  onDelete: (postId: number) => void;
 }
-
-const DetailDialog = styled.dialog`
-  width: 875px;
-  min-height: 1028px;
-
-  margin: auto;
-  padding: 0;
-  border: none;
-  background-color: #ffffff;
-
-  position: relative;
-  overflow-y: auto;
-
-  &::backdrop {
-    background-color: rgba(0, 0, 0, 0.45);
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 15px;
-  right: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const PostHeader = styled.header`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-`;
-
-const ProfileImage = styled.img`
-  width: 60px;
-  height: 60px;
-
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const PostTitle = styled.h2`
-  margin-top: 35px;
-  font-size: 32px;
-  font-weight: 700;
-  word-break: break-word;
-`;
-
-const PostContent = styled.p`
-  margin-top: 40px;
-  line-height: 1.6;
-
-  white-space: pre-wrap;
-
-  overflow-wrap: anywhere;
-`;
-
-const ContentImage = styled.img`
-  display: block;
-  max-width: 100%;
-  height: auto;
-`;
-
-const DetailContent = styled.div`
-  padding: 40px;
-`;
-
-const WriterInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-const WriterName = styled.strong`
-  font-weight: 600;
-`;
-
-const PostMeta = styled.span`
-  color: #777777;
-  font-size: 14px;
-`;
-
-const DefaultProfileImage = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: #eeeeee;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-`;
-
-const ImageList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 24px;
-`;
-
-const CategoryLabel = styled.span`
-  display: inline-block;
-  position: absolute;
-  top: 45px;
-  left: 740px;
-  font-size: 14px;
-  background-color: #f5f5f5;
-  color: #555555;
-  border-radius: 10px;
-  padding: 10px 16px;
-`;
-
-const ReactionBar = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 13px;
-  border-top: 10px solid #e5e5e5;
-  padding-top: 9px;
-  padding-left: 8px;
-  padding-bottom: 8px;
-`;
-
-const LikeCount = styled.span`
-  font-size: 20px;
-  font-weight: 500;
-  padding-top: 3px;
-`;
-
-const LikeButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const CommentInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-left: 13px;
-  padding-top: 4px;
-`;
-
-const CommentImage = styled.img`
-  padding-bottom: 4px;
-`;
-
-const CommentCount = styled.span`
-  font-size: 20px;
-  font-weight: 500;
-  padding-bottom: 2px;
-`;
-
-const CommentList = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border-top: 1px solid #e5e5e5;
-`;
-
-const CommentItem = styled.article`
-  padding: 10px;
-  border-bottom: 1px solid #e5e5e5;
-  flex-direction: column;
-  display: flex;
-  gap: 4px;
-`;
-
-const CommentHeader = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 10px;
-`;
-
-const CommentProfile = styled.img`
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: #eeeeee;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-`;
-
-const CommentAuthor = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  font-size: 16px;
-  font-weight: 700;
-`;
-
-const CommentBody = styled.p`
-  padding-top: 7px;
-  padding-left: 13px;
-  font-size: 18px;
-`;
-
-const CommentDateCreatedAt = styled.p`
-  font-size: 18px;
-  color: #999999;
-  font-weight: 500;
-`;
-
-const CommentDefaultProfileImage = styled.div`
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: #eeeeee;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-`;
-
-const PostMenuButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  top: 58px;
-  right: 35px;
-`;
-
-const KebabIcon = styled.img`
-  width: 16px;
-  height: 16px;
-  display: block;
-`;
-
-const ReportPopover = styled.div`
-  position: absolute;
-  z-index: 10;
-  background-color: #fff;
-  box-shadow: 0.1px 0.1px 0.1px 1px #000000;
-  border-radius: 10px;
-  width: 209px;
-  padding: 20px 123px 20px 16px;
-
-  top: 75px;
-  right: 43px;
-`;
-
-
 
 function formatPostDate(dateString: string) {
   const date = new Date(dateString);
@@ -286,16 +36,24 @@ function CommentDate(dateString: string) {
     day: "2-digit",
   })
     .format(setCommentDate)
-    .replace(/\.$/, "")
     .replace(/\.$/, "");
 }
 
-function PostDetailModal({ post, onClose }: PostDetailModalProps) {
+function PostDetailModal({ post, onClose, onDelete }: PostDetailModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [isPostMenuOpen, setIsPostMenuOpen] = useState(false);
+  const [comments, setComments] = useState<PostComment[]>([]);
+  const [commentText, setCommentText] = useState("");
+  const [openCommentMenuId, setOpenCommentMenuId] = useState<number | null>(
+    null,
+  );
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editingCommentText, setEditingCommentText] = useState("");
+  const [isPostEditing, setIsPostEditing] = useState(false);
+  const currentUserId = 1;
 
   function handleLikeClick() {
     if (isLiked === false) {
@@ -306,6 +64,48 @@ function PostDetailModal({ post, onClose }: PostDetailModalProps) {
     setIsLiked((previous) => !previous);
   }
 
+  function handleCommentDelete(commentId: number) {
+    setComments((currentComments) =>
+      currentComments.filter((comment) => comment.id !== commentId),
+    );
+
+    setOpenCommentMenuId(null);
+  }
+
+  function handleCommentEditStart(comment: PostComment) {
+    setEditingCommentId(comment.id);
+    setEditingCommentText(comment.content);
+
+    setOpenCommentMenuId(null);
+  }
+
+  function handleCommentEditCancel() {
+    setEditingCommentId(null);
+    setEditingCommentText("");
+  }
+
+  function handleCommentEditSave(commentId: number) {
+    const trimmedEditComment = editingCommentText.trim();
+
+    if (trimmedEditComment === "") {
+      return;
+    }
+
+    setComments((editComments) =>
+      editComments.map((editComment) =>
+        editComment.id === commentId
+          ? { ...editComment, content: trimmedEditComment }
+          : editComment,
+      ),
+    );
+    handleCommentEditCancel();
+  }
+
+  function handlePostEditStart() {
+    setIsPostEditing(true);
+    setIsPostMenuOpen(false);
+  }
+
   useEffect(() => {
     const dialog = dialogRef.current;
 
@@ -314,107 +114,263 @@ function PostDetailModal({ post, onClose }: PostDetailModalProps) {
     }
   }, []);
 
+  const handleCommentSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const trimmedComment = commentText.trim();
+    if (trimmedComment === "") {
+      return;
+    }
+
+    const nowComment: PostComment = {
+      id: Date.now(),
+      userId: 1,
+      authorName: "엉뚱한 너굴이",
+      profileImageUrl: null,
+      content: trimmedComment,
+      createdAt: new Date().toISOString(),
+    };
+
+    setComments((previous) => [...previous, nowComment]);
+
+    setCommentText("");
+  };
+
   return (
-    <DetailDialog
+    <S.DetailDialog
       ref={dialogRef}
       onClose={onClose}
       aria-labelledby="post-detail-title"
     >
-      <CloseButton
+      <S.CloseButton
         type="button"
         onClick={() => dialogRef.current?.close()}
         aria-label="게시글 상세 닫기"
       >
         <X aria-hidden="true" />
-      </CloseButton>
+      </S.CloseButton>
 
-      <CategoryLabel> {post.category.name} </CategoryLabel>
+      <S.CategoryLabel> {post.category.name} </S.CategoryLabel>
 
-      <DetailContent>
-        <PostHeader>
-          {post.writer.profileImageUrl ? (
-            <ProfileImage src={post.writer.profileImageUrl} alt="" />
+      <S.ModalScrollArea>
+        <S.DetailContent>
+          <S.PostHeader>
+            {post.writer.profileImageUrl ? (
+              <S.ProfileImage src={post.writer.profileImageUrl} alt="" />
+            ) : (
+              <S.DefaultProfileImage>
+                <UserRound aria-hidden="true" />
+              </S.DefaultProfileImage>
+            )}
+            <S.WriterInfo>
+              <S.WriterName> {post.writer.nickname} </S.WriterName>
+              <S.PostMeta>
+                {formatPostDate(post.createdAt)} - {post.viewCount} 조회
+              </S.PostMeta>
+            </S.WriterInfo>
+
+            <S.PostMenuArea>
+              <S.PostMenuButton
+                type="button"
+                aria-label="게시글 메뉴"
+                onClick={() => setIsPostMenuOpen((previous) => !previous)}
+                aria-expanded={isPostMenuOpen}
+              >
+                <S.KebabIcon src={KebabMenu} alt="" />
+              </S.PostMenuButton>
+
+              {isPostMenuOpen && (
+                <S.PostMenuPopover>
+                  {currentUserId !== post.writer.userId && (
+                    <S.ReportPopoverLink
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSeLaXHB-Wo9VVqcbNtGBlzQtL5rscli2KoiMpWsRs277_8Qbw/viewform"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      신고하기
+                    </S.ReportPopoverLink>
+                  )}
+
+                  {currentUserId === post.writer.userId && (
+                    <>
+                      <S.CommentDeleteButton
+                        type="button"
+                        aria-label="게시글 삭제"
+                        onClick={() => onDelete(post.id)}
+                      >
+                        삭제하기
+                      </S.CommentDeleteButton>
+
+                      <S.CommentEditButton
+                        type="button"
+                        aria-label="게시글 수정"
+                        onClick={handlePostEditStart}
+                      >
+                        수정하기
+                      </S.CommentEditButton>
+                    </>
+                  )}
+                </S.PostMenuPopover>
+              )}
+            </S.PostMenuArea>
+          </S.PostHeader>
+
+          {isPostEditing ? (
+            <p> 게시글 수정 중 </p>
           ) : (
-            <DefaultProfileImage>
-              <UserRound aria-hidden="true" />
-            </DefaultProfileImage>
+            <>
+              <S.PostTitle id="post-detail-title"> {post.title} </S.PostTitle>
+              <S.PostContent> {post.content} </S.PostContent>
+              {post.images.length > 0 && (
+                <S.ImageList>
+                  {[...post.images]
+                    .sort((a, b) => a.sortOrder - b.sortOrder)
+                    .map((image) => (
+                      <S.ContentImage
+                        key={image.id}
+                        src={image.imageUrl}
+                        alt={`${post.title} 첨부된 이미지`}
+                      />
+                    ))}
+                </S.ImageList>
+              )}
+            </>
           )}
-          <WriterInfo>
-            <WriterName> {post.writer.nickname} </WriterName>
-            <PostMeta>
-              {formatPostDate(post.createdAt)} - {post.viewCount} 조회
-            </PostMeta>
-          </WriterInfo>
-          <PostMenuButton
+        </S.DetailContent>
+
+        <S.ReactionBar>
+          <S.LikeButton
             type="button"
-            aria-label="게시글 메뉴"
-            onClick={() => setIsPostMenuOpen((previous) => !previous)}
-            aria-expanded="true"
+            onClick={handleLikeClick}
+            aria-pressed={isLiked}
+            aria-label={isLiked ? "좋아요 취소" : "좋아요"}
           >
-            <KebabIcon src={KebabMenu} alt="" />
-          </PostMenuButton>
-          {isPostMenuOpen && (
-            <ReportPopover>
-              <a href="#"> 신고하기 </a>
-            </ReportPopover>
-          )}
-        </PostHeader>
+            <img src={isLiked ? likeActiveIcon : likeDefaultIcon} alt="" />
+            <S.LikeCount>{likeCount}</S.LikeCount>
+          </S.LikeButton>
 
-        <PostTitle id="post-detail-title"> {post.title} </PostTitle>
-        <PostContent> {post.content} </PostContent>
-        {post.images.length > 0 && (
-          <ImageList>
-            {[...post.images]
-              .sort((a, b) => a.sortOrder - b.sortOrder)
-              .map((image) => (
-                <ContentImage
-                  key={image.id}
-                  src={image.imageUrl}
-                  alt={`${post.title} 첨부된 이미지`}
-                />
-              ))}
-          </ImageList>
-        )}
-      </DetailContent>
-      <ReactionBar>
-        <LikeButton
-          type="button"
-          onClick={handleLikeClick}
-          aria-pressed={isLiked}
-          aria-label={isLiked ? "좋아요 취소" : "좋아요"}
+          <S.CommentInfo>
+            <S.CommentImage src={commentIcon} alt="" />
+            <S.CommentCount> {comments.length} </S.CommentCount>
+          </S.CommentInfo>
+        </S.ReactionBar>
+        <S.CommentList>
+          {comments.map((comment) => (
+            <S.CommentItem key={comment.id}>
+              <S.CommentHeader>
+                <S.CommentAuthor>
+                  {comment.profileImageUrl ? (
+                    <S.CommentProfile src={comment.profileImageUrl} alt="" />
+                  ) : (
+                    <S.CommentDefaultProfileImage>
+                      <UserRound aria-hidden="true" />
+                    </S.CommentDefaultProfileImage>
+                  )}
+                  {comment.authorName}
+                </S.CommentAuthor>
+
+                <S.CommentMenuArea>
+                  <S.CommentDateCreatedAt>
+                    {CommentDate(comment.createdAt)}
+                  </S.CommentDateCreatedAt>
+
+                  <S.CommentButton
+                    type="button"
+                    aria-label="댓글 메뉴"
+                    onClick={() =>
+                      setOpenCommentMenuId((previous) =>
+                        previous === comment.id ? null : comment.id,
+                      )
+                    }
+                    aria-expanded={openCommentMenuId === comment.id}
+                  >
+                    <S.KebabIcon src={KebabMenu} alt="" />
+                  </S.CommentButton>
+                  {openCommentMenuId === comment.id && (
+                    <S.CommentMenuPopover>
+                      {currentUserId !== comment.userId && (
+                        <S.CommentMenuPopoverLink
+                          href="https://docs.google.com/forms/d/e/1FAIpQLSdZfb16smuoFx3K4JUiB-dqX5hKLywfr2FcyAI4KqWuSYdLZg/viewform"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          신고하기
+                        </S.CommentMenuPopoverLink>
+                      )}
+                      {currentUserId === comment.userId && (
+                        <>
+                          <S.CommentDeleteButton
+                            type="button"
+                            onClick={() => handleCommentDelete(comment.id)}
+                            aria-label="댓글 삭제"
+                          >
+                            삭제하기
+                          </S.CommentDeleteButton>
+                          <S.CommentEditButton
+                            type="button"
+                            onClick={() => handleCommentEditStart(comment)}
+                          >
+                            {" "}
+                            수정하기{" "}
+                          </S.CommentEditButton>
+                        </>
+                      )}
+                    </S.CommentMenuPopover>
+                  )}
+                </S.CommentMenuArea>
+              </S.CommentHeader>
+              {editingCommentId === comment.id ? (
+                <S.CommentEditArea>
+                  <S.CommentEditTextarea
+                    autoFocus
+                    placeholder="댓글 수정"
+                    value={editingCommentText}
+                    onChange={(e) => setEditingCommentText(e.target.value)}
+                    aria-label="댓글 수정 내용"
+                  />
+
+                  <S.CommentEditActions>
+                    <S.CommentEditCancelButton
+                      type="button"
+                      onClick={handleCommentEditCancel}
+                    >
+                      {" "}
+                      취소
+                    </S.CommentEditCancelButton>
+                    <S.CommentEditSaveButton
+                      type="button"
+                      onClick={() => handleCommentEditSave(comment.id)}
+                      disabled={!editingCommentText.trim()}
+                    >
+                      {" "}
+                      저장{" "}
+                    </S.CommentEditSaveButton>
+                  </S.CommentEditActions>
+                </S.CommentEditArea>
+              ) : (
+                <S.CommentBody> {comment.content} </S.CommentBody>
+              )}
+            </S.CommentItem>
+          ))}
+        </S.CommentList>
+      </S.ModalScrollArea>
+      <S.CommentForm onSubmit={handleCommentSubmit}>
+        <S.CommentInput
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          placeholder="댓글"
+          type="text"
+          aria-label="댓글 내용"
+        />
+
+        <S.CommentSubmitButton
+          type="submit"
+          disabled={!commentText.trim()}
+          aria-label="댓글 등록"
         >
-          <img src={isLiked ? likeActiveIcon : likeDefaultIcon} alt="" />
-          <LikeCount>{likeCount}</LikeCount>
-        </LikeButton>
-
-        <CommentInfo>
-          <CommentImage src={commentIcon} alt="" />
-          <CommentCount> {mockPostComments.length} </CommentCount>
-        </CommentInfo>
-      </ReactionBar>
-      <CommentList>
-        {mockPostComments.map((comment) => (
-          <CommentItem key={comment.id}>
-            <CommentHeader>
-              <CommentAuthor>
-                {comment.profileImageUrl ? (
-                  <CommentProfile src={comment.profileImageUrl} alt="" />
-                ) : (
-                  <CommentDefaultProfileImage>
-                    <UserRound aria-hidden="true" />
-                  </CommentDefaultProfileImage>
-                )}
-                {comment.authorName}
-              </CommentAuthor>
-              <CommentDateCreatedAt>
-                {CommentDate(comment.createdAt)}
-              </CommentDateCreatedAt>
-            </CommentHeader>
-            <CommentBody> {comment.content}</CommentBody>
-          </CommentItem>
-        ))}
-      </CommentList>
-    </DetailDialog>
+          <SendHorizontal size={28} aria-hidden="true" />
+        </S.CommentSubmitButton>
+      </S.CommentForm>
+    </S.DetailDialog>
   );
 }
 

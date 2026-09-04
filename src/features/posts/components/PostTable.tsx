@@ -1,89 +1,34 @@
 import type { PostListItemType } from "../types/post";
-import styled from "@emotion/styled";
-
-// 게시글 목록 테이블의 레이아웃과 번호·카테고리·제목·작성일 열의 너비 설정
-const Table = styled.table`
-  width: 100%;
-  height: 611px;
-  table-layout: fixed;
-  border-collapse: collapse;
-  background-color: #ffffff;
-
-  //첫번째 열: 게시글 번호
-  th:nth-of-type(1),
-  td:nth-of-type(1) {
-    width: 12%;
-    padding-left: 16px;
-  }
-
-  //두번째 열: 카테고리
-  th:nth-of-type(2),
-  td:nth-of-type(2) {
-    width: 20%;
-  }
-
-  //세번째 열 : 게시글 제목
-  th:nth-of-type(3),
-  td:nth-of-type(3) {
-    width: 48%;
-  }
-
-  //네번째 열: 작성일
-  th:nth-of-type(4),
-  td:nth-of-type(4) {
-    width: 20%;
-  }
-`;
+import G from "../../../styles/PostTable.styles";
 
 interface PostTableProps {
   posts: PostListItemType[];
   onPostClick: (postId: number) => void;
 }
 
-const TableHeader = styled.th`
-  padding: 6px 8px;
-  border-top: 3px solid #000000;
-  text-align: left;
-  font-weight: 500;
-`;
-
-const TableCell = styled.td`
-  padding: 8px;
-  border: none;
-  text-align: left;
-`;
-
-const TableRow = styled.tr`
-  cursor: pointer;
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
-`;
-
 function PostTable({ posts, onPostClick }: PostTableProps) {
   return (
-    <Table>
+    <G.Table>
       <thead>
         <tr>
-          <TableHeader> 번호 </TableHeader>
-          <TableHeader> 카테고리 </TableHeader>
-          <TableHeader> 제목 </TableHeader>
-          <TableHeader> 작성일</TableHeader>
+          <G.TableHeader> 번호 </G.TableHeader>
+          <G.TableHeader> 카테고리 </G.TableHeader>
+          <G.TableHeader> 제목 </G.TableHeader>
+          <G.TableHeader> 작성일</G.TableHeader>
         </tr>
       </thead>
 
       <tbody>
         {posts.map((post) => (
-          <TableRow key={post.id} onClick={() => onPostClick(post.id)}>
-            <TableCell> {post.number} </TableCell>
-            <TableCell> {post.category} </TableCell>
-            <TableCell> {post.title} </TableCell>
-            <TableCell> {post.createdAt} </TableCell>
-          </TableRow>
+          <G.TableRow key={post.id} onClick={() => onPostClick(post.id)}>
+            <G.TableCell> {post.number} </G.TableCell>
+            <G.TableCell> {post.category} </G.TableCell>
+            <G.TableCell> {post.title} </G.TableCell>
+            <G.TableCell> {post.createdAt} </G.TableCell>
+          </G.TableRow>
         ))}
       </tbody>
-    </Table>
+    </G.Table>
   );
 }
 
