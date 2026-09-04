@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { BackgroundLayer } from "../BackgroundActStyle";
-import { Background } from "../BackgroundAct";
-import { ContentLayer } from "../BackgroundActStyle";
+import { BackgroundLayer } from "../../BackgroundActStyle";
+import { Background } from "../../BackgroundAct";
+import { ContentLayer } from "../../BackgroundActStyle";
 
 import {
   SignupWrapper,
@@ -121,7 +121,7 @@ export const SignupPage2 = () => {
       return;
     }
 
-    navigate("/signup/page3");
+    navigate("/signup/3");
   };
 
   return (
