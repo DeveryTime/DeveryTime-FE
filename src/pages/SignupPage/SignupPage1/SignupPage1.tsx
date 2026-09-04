@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { InputBox } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { BackgroundLayer } from "../BackgroundActStyle";
-import { Background } from "../BackgroundAct";
-import { ContentLayer } from "../BackgroundActStyle";
+import { BackgroundLayer } from "../../BackgroundActStyle";
+import { Background } from "../../BackgroundAct";
+import { ContentLayer } from "../../BackgroundActStyle";
+import { InputBox } from "../../../components";
 
 import {
   SignupWrapper,
@@ -61,7 +61,7 @@ export const SignupPage1 = () => {
       return;
     }
 
-    navigate("/signup/page2");
+    navigate("/signup/2");
   };
 
   return (

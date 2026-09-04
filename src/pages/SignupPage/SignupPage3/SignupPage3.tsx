@@ -3,9 +3,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { IoMdLock } from "react-icons/io";
-import { BackgroundLayer } from "../BackgroundActStyle";
-import { Background } from "../BackgroundAct";
-import { ContentLayer } from "../BackgroundActStyle";
+import { BackgroundLayer } from "../../BackgroundActStyle";
+import { Background } from "../../BackgroundAct";
+import { ContentLayer } from "../../BackgroundActStyle";
 
 import {
   SignupWrapper,

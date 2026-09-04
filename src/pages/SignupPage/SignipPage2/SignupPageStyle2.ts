@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { colors } from "../../designToken/colors";
+import { colors } from "../../../designToken/colors";
 import { Link } from "react-router-dom";
 
 export const SignupWrapper = styled.div`
