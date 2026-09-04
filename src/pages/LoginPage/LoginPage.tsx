@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { InputBox } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { BackgroundLayer } from "../BackgroundActStyle";
+import { BackgroundLayer } from "../../BackgroundActStyle";
 import { Background } from "../BackgroundAct";
-import { ContentLayer } from "../BackgroundActStyle";
+import { ContentLayer } from "../../BackgroundActStyle";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 import {
