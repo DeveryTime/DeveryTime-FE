@@ -121,7 +121,7 @@ export const SignupPage2 = () => {
       return;
     }
 
-    navigate("/signup/page3");
+    navigate("/signup/3");
   };
 
   return (
