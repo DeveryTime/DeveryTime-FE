@@ -1,7 +1,8 @@
 import type { PostListItemType } from "../types/post";
 import type { PostDetailResponse } from "../types/post";
 import type { PostComment } from "../types/post";
-//API 연결 전까지 이 데이터를 임시로 사용함
+
+// API 연결 전까지 게시글 목록 화면에서 사용할 임시 데이터다.
 export const mockPosts: PostListItemType[] = Array.from(
   { length: 10 },
   (_, index) => ({
@@ -13,6 +14,7 @@ export const mockPosts: PostListItemType[] = Array.from(
   }),
 );
 
+// 게시글 상세 모달에서 사용할 임시 상세 데이터다.
 export const mockPostDetail: Record<number, PostDetailResponse> = {
   1: {
     id: 1,
@@ -39,6 +41,7 @@ export const mockPostDetail: Record<number, PostDetailResponse> = {
   },
 };
 
+// 댓글 기능을 확인하기 위한 임시 댓글 데이터다.
 export const mockPostComments: PostComment[] = [
   {
     id: 1,

@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { colors } from "../designToken/colors";
 
 const PaginationContainer = styled.nav`
   width: 360px;
@@ -23,21 +24,21 @@ const PageButton = styled.button`
   align-items: center;
   justify-content: center;
 
-  color: #000000;
+  color: ${colors.gray[1000]};
   font-size: 16px;
   line-height: 1;
 
   &:hover:not(:disabled) {
-    color: #577aed;
+    color: ${colors.interaction.hover};
   }
 
   &[aria-current="page"] {
-    color: #577aed;
+    color: ${colors.interaction.hover};
     font-weight: 700;
   }
 
   &:disabled {
-    color: #b0b0b0;
+    color: ${colors.gray[400]};
     cursor: not-allowed;
   }
 `;

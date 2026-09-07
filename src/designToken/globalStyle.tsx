@@ -1,5 +1,7 @@
 import { Global, css } from "@emotion/react";
+import { colors } from "./colors";
 
+// 앱 전체에 적용되는 초기화 및 공통 기본 스타일이다.
 export const GlobalStyle = () => (
   <Global
     styles={css`
@@ -11,7 +13,7 @@ export const GlobalStyle = () => (
 
       body {
         font-family: Pretendard, sans-serif;
-        background-color: #f5f5f5;
+        background-color: ${colors.gray[50]};
       }
 
       a {

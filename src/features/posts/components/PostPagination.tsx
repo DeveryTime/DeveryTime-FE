@@ -19,19 +19,23 @@ function PostPagination({
   totalPages,
   onChange,
 }: PostPaginationProps) {
+  // 한 번에 보여줄 페이지 번호 개수다.
   const pageGroupSize = 10;
 
+  // 현재 페이지가 속한 페이지 그룹의 시작·마지막 번호를 계산한다.
   const startPage =
     Math.floor((currentPage - 1) / pageGroupSize) * pageGroupSize + 1;
 
   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
 
+  // 시작 번호부터 마지막 번호까지 화면에 표시할 페이지 목록을 만든다.
   const pages = Array.from(
     { length: endPage - startPage + 1 },
     (_, index) => startPage + index,
   );
 
   return (
+    // 첫 페이지, 이전 페이지, 페이지 번호, 다음 페이지, 마지막 페이지를 제공한다.
     <D.PaginationContainer aria-label="게시글 페이지 이동">
       <D.PageButton
         type="button"

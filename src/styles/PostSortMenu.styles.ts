@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { colors } from "../designToken/colors";
 
 interface SortButtonStyleProps {
   $isSelected: boolean;
@@ -9,7 +10,7 @@ const SortNav = styled.nav`
   left: 10px;
   width: 80px;
   padding-top: 8px;
-  border-top: 3px solid #222222;
+  border-top: 3px solid ${colors.gray[900]};
 `;
 
 const SortList = styled.ul`

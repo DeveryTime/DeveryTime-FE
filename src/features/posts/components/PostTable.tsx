@@ -8,6 +8,7 @@ interface PostTableProps {
 
 function PostTable({ posts, onPostClick }: PostTableProps) {
   return (
+    // 게시글 번호, 카테고리, 제목, 작성일을 표 형태로 표시한다.
     <G.Table>
       <thead>
         <tr>
@@ -20,6 +21,7 @@ function PostTable({ posts, onPostClick }: PostTableProps) {
 
       <tbody>
         {posts.map((post) => (
+          // 행을 클릭하면 선택한 게시글의 ID를 부모 컴포넌트에 전달한다.
           <G.TableRow key={post.id} onClick={() => onPostClick(post.id)}>
             <G.TableCell> {post.number} </G.TableCell>
             <G.TableCell> {post.category} </G.TableCell>

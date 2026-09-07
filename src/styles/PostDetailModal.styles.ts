@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import { colors } from "../designToken/colors";
+
 const DetailDialog = styled.dialog`
   width: 875px;
   height: calc(100vh - 48px);
@@ -7,13 +9,13 @@ const DetailDialog = styled.dialog`
   margin: auto;
   padding: 0;
   border: none;
-  background-color: #ffffff;
+  background-color: ${colors.gray[0]};
 
   position: relative;
   overflow: hidden;
 
   &::backdrop {
-    background-color: rgba(0, 0, 0, 0.45);
+    background-color: ${colors.alpha.black45};
   }
 
   display: grid;
@@ -91,7 +93,7 @@ const WriterName = styled.strong`
 `;
 
 const PostMeta = styled.span`
-  color: #777777;
+  color: ${colors.gray[600]};
   font-size: 14px;
 `;
 
@@ -99,7 +101,7 @@ const DefaultProfileImage = styled.div`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #eeeeee;
+  background-color: ${colors.gray[100]};
 
   display: flex;
   align-items: center;
@@ -117,11 +119,11 @@ const ImageList = styled.div`
 const CategoryLabel = styled.span`
   display: inline-block;
   position: absolute;
-  top: 45px;
+  top: 50px;
   left: 740px;
   font-size: 14px;
-  background-color: #f5f5f5;
-  color: #555555;
+  background-color: ${colors.gray[50]};
+  color: ${colors.gray[700]};
   border-radius: 10px;
   padding: 10px 16px;
 `;
@@ -131,7 +133,7 @@ const ReactionBar = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 13px;
-  border-top: 10px solid #e5e5e5;
+  border-top: 10px solid ${colors.gray[200]};
   margin-top: auto;
   padding-top: 9px;
   padding-left: 8px;
@@ -159,24 +161,27 @@ const CommentInfo = styled.div`
 `;
 
 const CommentImage = styled.img`
-  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 2px;
 `;
 
 const CommentCount = styled.span`
+  display: inline-block;
   font-size: 20px;
   font-weight: 500;
+  padding-bottom: 5px;
 `;
 
 const CommentList = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid ${colors.gray[200]};
 `;
 
 const CommentItem = styled.article`
   padding: 10px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid ${colors.gray[200]};
   flex-direction: column;
   display: flex;
   gap: 4px;
@@ -193,7 +198,7 @@ const CommentProfile = styled.img`
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  background-color: #eeeeee;
+  background-color: ${colors.gray[100]};
 
   display: flex;
   align-items: center;
@@ -217,7 +222,7 @@ const CommentBody = styled.p`
 
 const CommentDateCreatedAt = styled.p`
   font-size: 18px;
-  color: #999999;
+  color: ${colors.gray[500]};
   font-weight: 500;
 `;
 
@@ -225,7 +230,7 @@ const CommentDefaultProfileImage = styled.div`
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  background-color: #eeeeee;
+  background-color: ${colors.gray[100]};
 
   display: flex;
   align-items: center;
@@ -252,8 +257,8 @@ const ReportPopoverLink = styled.a`
   display: block;
   position: absolute;
   z-index: 10;
-  background-color: #fff;
-  box-shadow: 0.1px 0.1px 0.1px 1px #000000;
+  background-color: ${colors.gray[0]};
+  box-shadow: 0.1px 0.1px 0.1px 1px ${colors.gray[1000]};
   border-radius: 10px;
   width: 209px;
   padding: 20px 123px 20px 16px;
@@ -262,8 +267,8 @@ const ReportPopoverLink = styled.a`
   right: 45px;
 
   &:hover {
-    background-color: #fff1f1;
-    color: #d92d20;
+    background-color: ${colors.red[50]};
+    color: ${colors.red[600]};
   }
 `;
 
@@ -274,9 +279,9 @@ const CommentForm = styled.form`
 
   width: 100%;
   padding: 16px 18px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid ${colors.gray[200]};
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: ${colors.gray[0]};
 
   z-index: 20;
   flex-shrink: 0;
@@ -291,16 +296,16 @@ const CommentInput = styled.input`
   border-radius: 999px;
   outline: none;
 
-  background-color: #eeeeee;
-  color: #111111;
+  background-color: ${colors.gray[100]};
+  color: ${colors.gray[950]};
   font-size: 16px;
 
   &::placeholder {
-    color: #777777;
+    color: ${colors.gray[600]};
   }
 
   &:focus {
-    box-shadow: 0 0 0 2px #3469f9;
+    box-shadow: 0 0 0 2px ${colors.primary[500]};
   }
 `;
 
@@ -313,10 +318,10 @@ const CommentSubmitButton = styled.button`
   height: 42px;
   flex-shrink: 0;
 
-  color: #111111;
+  color: ${colors.gray[950]};
 
   &:disabled {
-    color: #aaaaaa;
+    color: ${colors.gray[400]};
     cursor: not-allowed;
   }
 `;
@@ -349,10 +354,10 @@ const CommentMenuPopover = styled.div`
   width: 209px;
   padding: 6px;
 
-  background-color: #ffffff;
-  border: 1px solid #e5e5e5;
+  background-color: ${colors.gray[0]};
+  border: 1px solid ${colors.gray[200]};
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px ${colors.alpha.black12};
 `;
 
 const CommentMenuPopoverLink = styled.a`
@@ -360,14 +365,14 @@ const CommentMenuPopoverLink = styled.a`
   width: 100%;
   padding: 12px 16px;
 
-  color: #111111;
+  color: ${colors.gray[950]};
   text-align: left;
   white-space: nowrap;
   border-radius: 6px;
 
   &:hover {
-    color: #d92d20;
-    background-color: #fff1f1;
+    color: ${colors.red[600]};
+    background-color: ${colors.red[50]};
   }
 `;
 
@@ -379,15 +384,15 @@ const CommentDeleteButton = styled.button`
   border-radius: 6px;
   background-color: transparent;
 
-  color: #111111;
+  color: ${colors.gray[950]};
   font: inherit;
   text-align: left;
   white-space: nowrap;
   cursor: pointer;
 
   &:hover {
-    color: #d92d20;
-    background-color: #fff1f1;
+    color: ${colors.red[600]};
+    background-color: ${colors.red[50]};
   }
 `;
 
@@ -399,15 +404,15 @@ const CommentEditButton = styled.button`
   border-radius: 6px;
   background-color: transparent;
 
-  color: #111111;
+  color: ${colors.gray[950]};
   font: inherit;
   text-align: left;
   white-space: nowrap;
   cursor: pointer;
 
   &:hover {
-    background-color: #e6ecff;
-    color: #013ce5;
+    background-color: ${colors.blue[50]};
+    color: ${colors.blue[600]};
   }
 `;
 
@@ -422,13 +427,13 @@ const CommentEditTextarea = styled.textarea`
   width: 100%;
   min-height: 80px;
   padding: 12px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid ${colors.gray[200]};
   box-sizing: border-box;
   border-radius: 8px;
   font: inherit;
   resize: none;
   &:focus {
-    border-color: #3469f9;
+    border-color: ${colors.primary[500]};
     outline: none;
   }
 `;
@@ -443,33 +448,33 @@ const CommentEditActions = styled.div`
 
 const CommentEditCancelButton = styled.button`
   padding: 8px 14px;
-  border: 1px solid #e5e5e5;
-  background-color: #ffffff;
-  color: #555555;
+  border: 1px solid ${colors.gray[200]};
+  background-color: ${colors.gray[0]};
+  color: ${colors.gray[700]};
   font: inherit;
   border-radius: 12px;
   cursor: pointer;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${colors.gray[50]};
   }
 `;
 
 const CommentEditSaveButton = styled.button`
   padding: 8px 14px;
   border: none;
-  background-color: #3469f9;
-  color: #ffffff;
+  background-color: ${colors.primary[500]};
+  color: ${colors.gray[0]};
   border-radius: 12px;
   font: inherit;
   cursor: pointer;
 
   &:hover:not(:disabled) {
-    background-color: #2454d6;
+    background-color: ${colors.primary[600]};
   }
 
   &:disabled {
-    background-color: #b8c7ee;
+    background-color: ${colors.primary[300]};
     cursor: not-allowed;
   }
 `;
@@ -481,10 +486,10 @@ const PostMenuPopover = styled.div`
   flex-direction: column;
   width: 200px;
   padding: 6px;
-  background-color: #ffffff;
-  border: 1px solid #e5e5e5;
+  background-color: ${colors.gray[0]};
+  border: 1px solid ${colors.gray[200]};
   border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 4px 12px ${colors.alpha.black12};
   top: calc(100% + 8px);
   right: 5px;
 `;

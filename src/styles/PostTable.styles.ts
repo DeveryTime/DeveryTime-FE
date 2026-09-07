@@ -1,11 +1,13 @@
 import styled from "@emotion/styled";
+import { colors } from "../designToken/colors";
+
 // 게시글 목록 테이블의 레이아웃과 번호·카테고리·제목·작성일 열의 너비 설정
 const Table = styled.table`
   width: 100%;
   height: 611px;
   table-layout: fixed;
   border-collapse: collapse;
-  background-color: #ffffff;
+  background-color: ${colors.gray[0]};
 
   //첫번째 열: 게시글 번호
   th:nth-of-type(1),
@@ -35,7 +37,7 @@ const Table = styled.table`
 
 const TableHeader = styled.th`
   padding: 6px 8px;
-  border-top: 3px solid #000000;
+  border-top: 3px solid ${colors.gray[1000]};
   text-align: left;
   font-weight: 500;
 `;
@@ -50,7 +52,7 @@ const TableRow = styled.tr`
   cursor: pointer;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: ${colors.gray[50]};
   }
 `;
 
