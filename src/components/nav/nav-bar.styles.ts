@@ -30,6 +30,7 @@ export const logo = css`
   align-items: center;
   gap: 20px;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 export const logoName = css`
   display: flex;
