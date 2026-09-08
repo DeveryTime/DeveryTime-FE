@@ -61,3 +61,12 @@ export const mockPostComments: PostComment[] = [
     profileImageUrl: null,
   },
 ];
+
+// 마이페이지 내가 쓴 글 페이지에서 내가 쓴 글을 확인하기 위한 임시 데이터이다.
+export const mockMyPosts: PostListItemType[] = mockPosts
+  .slice(0, 5)
+  .map((post, index) => ({
+    ...post,
+    id: index + 1,
+    number: index + 1,
+  }));
