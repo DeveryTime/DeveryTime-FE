@@ -1,46 +1,37 @@
 import { useState } from "react";
-import O from "../../../styles/MyPostsPage.styles";
-import PostTable from "../components/PostTable";
-import PostPagination from "../components/PostPagination";
+import O from "../../../styles/MyPostsPages.styles";
+import PostTable from "./PostTable";
+import PostPagination from "./PostPagination";
+import PostDetailModal from "./PostDetailModal";
 import { mockMyPosts, mockPostDetail } from "../data/mockPosts";
 import type { PostListItemType } from "../types/post";
-import PostDetailModal from "../components/PostDetailModal";
-import { PAGE_SIZE } from "../../../constants/pagination";
 
 function MyPostsPage() {
-  const [currentPage, setCurrentPage] = useState(1);
+  // 내가 쓴 글 목록과 현재 페이지를 관리한다.
   const [posts, setPosts] = useState<PostListItemType[]>(mockMyPosts);
-
-  const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
-
-  const paginatedPosts = posts.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
-  );
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
-  // 선택한 게시글 ID에 해당하는 상세 데이터를 조회한다.
+  // 선택한 게시글의 상세 데이터를 조회한다.
   const selectedPost =
     selectedPostId !== null ? mockPostDetail[selectedPostId] : null;
-
-  // 정렬 기준별로 화면 제목을 연결한다.
 
   // 게시글을 삭제한 뒤 목록에서 제거하고 상세 모달을 닫는다.
   function handlePostDelete(postId: number) {
     setPosts((currentPosts) =>
       currentPosts.filter((post) => post.id !== postId),
     );
-
     setSelectedPostId(null);
   }
 
   return (
+    // 내가 쓴 글 제목, 게시글 목록, 상세 모달, 페이지네이션을 배치한다.
     <O.PageContainer>
       <O.Content>
         <O.Title>내가 쓴 글</O.Title>
 
-        {/* 게시글 목록 */}
-        <PostTable posts={paginatedPosts} onPostClick={setSelectedPostId} />
+        {/* 내가 쓴 글 목록 */}
+        <PostTable posts={posts} onPostClick={setSelectedPostId} />
 
         {/* 게시글을 선택했을 때만 상세 모달을 표시한다. */}
         {selectedPost && (
@@ -51,10 +42,10 @@ function MyPostsPage() {
           />
         )}
 
-        {/* 게시글 페이지 이동 */}
+        {/* 내가 쓴 글 페이지 이동 */}
         <PostPagination
           currentPage={currentPage}
-          totalPages={totalPages}
+          totalPages={1}
           onChange={setCurrentPage}
         />
       </O.Content>

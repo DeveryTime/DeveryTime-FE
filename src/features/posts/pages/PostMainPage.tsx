@@ -4,41 +4,23 @@ import PostTable from "../components/PostTable";
 import PostPagination from "../components/PostPagination";
 import { mockPosts } from "../data/mockPosts";
 import type { PostListItemType, PostSort } from "../types/post";
-import styled from "@emotion/styled";
+import D from "../../../styles/PostMainPage.styles";
 import PostDetailModal from "../components/PostDetailModal";
 import { mockPostDetail } from "../data/mockPosts";
-
-const PageContainer = styled.main`
-  display: grid;
-  grid-template-columns: 130px 1293px;
-  column-gap: 56px;
-  align-items: start;
-
-  width: 1479px;
-  margin: 108px auto 0;
-`;
-
-// 정렬 메뉴를 테이블 시작 높이에 맞춤
-const SortMenuArea = styled.aside`
-  margin-top: 78px;
-`;
-
-const Content = styled.section`
-  width: 1293px;
-`;
-
-const Title = styled.h1`
-  margin: 0 0 16px;
-  font-size: 48px;
-  font-weight: 600;
-  line-height: 1.3;
-`;
+import { PAGE_SIZE } from "../../../constants/pagination";
 
 function PostMainPage() {
   // 현재 선택된 정렬 기준, 페이지, 게시글 목록, 상세 게시글을 관리한다.
   const [selectedSort, setSelectedSort] = useState<PostSort>("likes");
   const [currentPage, setCurrentPage] = useState(1);
   const [posts, setPosts] = useState<PostListItemType[]>(mockPosts);
+
+  const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
+
+  const paginatedPosts = posts.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
   // 선택한 게시글 ID에 해당하는 상세 데이터를 조회한다.
@@ -63,17 +45,17 @@ function PostMainPage() {
 
   return (
     // 정렬 메뉴, 게시글 목록, 상세 모달, 페이지네이션을 배치한다.
-    <PageContainer>
-      <SortMenuArea>
+    <D.PageContainer>
+      <D.SortMenuArea>
         <PostSortMenu selectedSort={selectedSort} onChange={setSelectedSort} />
-      </SortMenuArea>
+      </D.SortMenuArea>
 
-      <Content>
+      <D.Content>
         {/* 현재 정렬 기준에 따른 게시글 목록 제목 */}
-        <Title>{sortTitles[selectedSort]}</Title>
+        <D.Title>{sortTitles[selectedSort]}</D.Title>
 
         {/* 게시글 목록 */}
-        <PostTable posts={posts} onPostClick={setSelectedPostId} />
+        <PostTable posts={paginatedPosts} onPostClick={setSelectedPostId} />
 
         {/* 게시글을 선택했을 때만 상세 모달을 표시한다. */}
         {selectedPost && (
@@ -87,11 +69,11 @@ function PostMainPage() {
         {/* 게시글 페이지 이동 */}
         <PostPagination
           currentPage={currentPage}
-          totalPages={10}
+          totalPages={totalPages}
           onChange={setCurrentPage}
         />
-      </Content>
-    </PageContainer>
+      </D.Content>
+    </D.PageContainer>
   );
 }
 

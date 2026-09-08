@@ -1,12 +1,9 @@
-import PostMainPage from "./features/posts/pages/PostMainPage";
-
+import { RouterProvider } from "react-router-dom";
+import { router } from "../src/router/index";
 function App() {
-  return (
-    // 애플리케이션의 메인 게시글 페이지를 렌더링한다.
-    <div>
-      <PostMainPage />
-    </div>
-  );
+  return <RouterProvider router={router} />;
+
+  
 }
 
 export default App;
