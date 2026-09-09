@@ -64,6 +64,8 @@ function PostDetailModal({ post, onClose, onDelete }: PostDetailModalProps) {
 
   // 게시글 수정 모드 여부를 관리한다.
   const [isPostEditing, setIsPostEditing] = useState(false);
+  const [editingPostTitle, setEditingPostTitle] = useState("");
+  const [editingPostContent, setEditingPostContent] = useState("");
 
   // 현재 로그인한 사용자의 ID라고 가정한 값이다.
   const currentUserId = 1;
@@ -101,6 +103,12 @@ function PostDetailModal({ post, onClose, onDelete }: PostDetailModalProps) {
     setEditingCommentText("");
   }
 
+  function handlePostEditCancel() {
+    setEditingPostTitle(post.title);
+    setEditingPostContent(post.content);
+    setIsPostEditing(false);
+  }
+
   // 수정된 댓글 내용을 목록에 반영한다.
   function handleCommentEditSave(commentId: number) {
     const trimmedEditComment = editingCommentText.trim();
@@ -121,6 +129,8 @@ function PostDetailModal({ post, onClose, onDelete }: PostDetailModalProps) {
 
   // 게시글 수정 모드를 시작하고 게시글 메뉴를 닫는다.
   function handlePostEditStart() {
+    setEditingPostTitle(post.title);
+    setEditingPostContent(post.content);
     setIsPostEditing(true);
     setIsPostMenuOpen(false);
   }
@@ -240,7 +250,24 @@ function PostDetailModal({ post, onClose, onDelete }: PostDetailModalProps) {
 
           {/* 게시글 본문 또는 게시글 수정 화면 */}
           {isPostEditing ? (
-            <p> 게시글 수정 중 </p>
+            <S.PostEditForm>
+              <S.PostTitle id="post-detail-title"> 게시글 수정 중 </S.PostTitle>
+
+              <S.PostEditTitleInput
+                value={editingPostTitle}
+                onChange={(e) => setEditingPostTitle(e.target.value)}
+                aria-label="게시글 제목"
+              />
+
+              <S.PostEditActions>
+                <S.PostEditCancelButton
+                  type="button"
+                  onClick={handlePostEditCancel}
+                >
+                  취소
+                </S.PostEditCancelButton>
+              </S.PostEditActions>
+            </S.PostEditForm>
           ) : (
             <>
               <S.PostTitle id="post-detail-title"> {post.title} </S.PostTitle>
