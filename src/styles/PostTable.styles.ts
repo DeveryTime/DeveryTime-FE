@@ -4,7 +4,7 @@ import { colors } from "../designToken/colors";
 // 게시글 목록 테이블의 레이아웃과 번호·카테고리·제목·작성일 열의 너비 설정
 const Table = styled.table`
   width: 100%;
-  height: 611px;
+  height: auto;
   table-layout: fixed;
   border-collapse: collapse;
   background-color: ${colors.gray[0]};

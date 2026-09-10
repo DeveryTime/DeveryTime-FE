@@ -65,7 +65,6 @@ function PostDetailModal({ post, onClose, onDelete }: PostDetailModalProps) {
   // 게시글 수정 모드 여부를 관리한다.
   const [isPostEditing, setIsPostEditing] = useState(false);
   const [editingPostTitle, setEditingPostTitle] = useState("");
-  const [editingPostContent, setEditingPostContent] = useState("");
 
   // 현재 로그인한 사용자의 ID라고 가정한 값이다.
   const currentUserId = 1;
@@ -105,7 +104,6 @@ function PostDetailModal({ post, onClose, onDelete }: PostDetailModalProps) {
 
   function handlePostEditCancel() {
     setEditingPostTitle(post.title);
-    setEditingPostContent(post.content);
     setIsPostEditing(false);
   }
 
@@ -130,7 +128,6 @@ function PostDetailModal({ post, onClose, onDelete }: PostDetailModalProps) {
   // 게시글 수정 모드를 시작하고 게시글 메뉴를 닫는다.
   function handlePostEditStart() {
     setEditingPostTitle(post.title);
-    setEditingPostContent(post.content);
     setIsPostEditing(true);
     setIsPostMenuOpen(false);
   }
