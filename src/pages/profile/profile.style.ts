@@ -152,3 +152,14 @@ export const nsaveBtn = css`
     background: #888;
   }
 `;
+
+export const toastStyle = {
+  background: "#ffffff",
+  color: "#555555",
+  border: "1px solid #dddddd",
+  borderRadius: "10px",
+  padding: "14px 18px",
+  fontSize: "14px",
+  fontWeight: "500",
+  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.08)",
+};

@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 
 import React, { useState, useRef } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 // import axios from "axios";
 
 import NavBar from "../../components/nav/nav-bar";
@@ -28,6 +30,15 @@ type User = {
 };
 
 const Profile = () => {
+  const navigate = useNavigate();
+  // 로그아웃
+  const Logout = () => {
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("accessToken");
+
+    toast.success("로그아웃되었습니다.");
+    navigate("/login");
+  };
   // 백엔드 연결 전 사용할 임시 사용자 데이터
   const [user, setUser] = useState<User | null>({
     name: "정우영",
@@ -62,7 +73,7 @@ const Profile = () => {
     console.log("변경된 아이디:", username);
     console.log("새 프로필 이미지:", newProfileImage);
 
-    alert("변경사항이 저장되었습니다.");
+    toast.success("변경사항이 저장되었습니다.");
 
     /*
     // 나중에 백엔드 연결 시 사용할 코드
@@ -95,7 +106,7 @@ const Profile = () => {
           <p>내 정보</p>
           <p>내가 쓴 글</p>
           <p className="active">프로필 수정</p>
-          <p>로그아웃</p>
+          <p onClick={Logout}>로그아웃</p>
         </div>
 
         {/* 프로필 수정 영역 */}

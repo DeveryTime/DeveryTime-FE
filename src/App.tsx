@@ -1,12 +1,18 @@
 import "./designToken/globalStyle";
 import { GlobalStyle } from "./designToken/globalStyle";
-import Info from "./pages/profile/my-Info/my-Info";
+import { Toaster } from "react-hot-toast";
 import Profile from "./pages/profile/profile";
 
 function App() {
   return (
     <>
       <GlobalStyle />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 2500,
+        }}
+      />
       <Profile />
     </>
   );
