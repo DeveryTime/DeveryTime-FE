@@ -15,6 +15,11 @@ export const GlobalStyle = () => (
         font-family: Pretendard, sans-serif;
         margin: 0;
         background-color: ${colors.gray[50]};
+      html,
+      body,
+      #root {
+        width: 100%;
+        min-height: 100%;
       }
 
       a {
