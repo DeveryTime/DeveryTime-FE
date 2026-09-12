@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { Slide } from "react-awesome-reveal";
 import {
   startBtn,
@@ -8,6 +7,7 @@ import {
   text4Css,
   textCss,
 } from "./text.style";
+import { Link } from "react-router-dom";
 
 const Text = () => {
   return (
@@ -52,7 +52,9 @@ const Text = () => {
         </div>
       </div>
 
-      <div css={startBtn}>시작하기</div>
+      <Link to={"/main"} css={startBtn}>
+        시작하기
+      </Link>
     </>
   );
 };

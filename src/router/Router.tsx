@@ -2,6 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import { LoginPage } from "../pages/LoginPage/LoginPage";
 import { AuthLayout, RootLayout } from "../Layouts";
 import { SignupPage } from "../pages/SignupPage/SignupPage";
+import LandingPage from "../pages/landing-page.tsx";
+import PostMainPage from "../features/posts/pages/PostMainPage.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -10,12 +12,22 @@ export const router = createBrowserRouter([
 
     children: [
       {
+        path: "/login",
+        element: <LoginPage />,
+      },
+
+      {
         element: <RootLayout />,
 
         children: [
           {
-            path: "/login",
-            element: <LoginPage />,
+            index: true,
+            element: <LandingPage />,
+          },
+
+          {
+            path: "/main",
+            element: <PostMainPage />,
           },
 
           {

@@ -1,16 +1,16 @@
-import NavBar from "./components/nav/nav-bar";
 import "./designToken/globalStyle";
 import { GlobalStyle } from "./designToken/globalStyle";
-import PostMainPage from "./features/posts/pages/PostMainPage";
-import Landing from "./pages/landing-page";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router/Router.tsx";
 
 function App() {
   return (
     <>
       <GlobalStyle />
-      <NavBar />
-      <PostMainPage />
-        <Landing />
+      <RouterProvider router={router} />
+      {/*<NavBar />*/}
+      {/*<PostMainPage />*/}
+      {/*  <Landing />*/}
     </>
   );
 }
