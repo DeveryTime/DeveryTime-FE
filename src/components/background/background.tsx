@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { useEffect, useRef } from "react";
 import type { SerializedStyles } from "@emotion/react";
 import {

@@ -1,6 +1,5 @@
 import Background from "../components/background/background";
 import PandaMotion from "../components/landing-panda/panda";
-import NavBar from "../components/nav/nav-bar";
 import Text from "../components/landing-text/text";
 
 const Landing = () => {
@@ -12,10 +11,6 @@ const Landing = () => {
         minHeight: "100vh",
       }}
     >
-      <div style={{ position: "relative", zIndex: 10 }}>
-        <NavBar />
-      </div>
-
       <div style={{ position: "relative", zIndex: 5 }}>
         <Background />
       </div>

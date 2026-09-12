@@ -1,24 +1,23 @@
 import { useState } from "react";
 import { InputBox } from "../../components";
 import { useNavigate } from "react-router-dom";
-import { BackgroundLayer } from "../../BackgroundActStyle";
+import { BackgroundLayer, ContentLayer } from "../BackgroundActStyle";
 import { Background } from "../BackgroundAct";
-import { ContentLayer } from "../../BackgroundActStyle";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 import {
-  SignupWrapper,
-  CardBox,
-  Title,
   Button,
-  Qusetion,
-  LinkText,
-  QuestionText,
-  PasswordArea,
+  CardBox,
   EyeButton,
+  LinkText,
+  PasswordArea,
   PasswordInput,
   PasswordWrapper,
   QuestionPasswordText,
+  QuestionText,
+  Qusetion,
+  SignupWrapper,
+  Title,
 } from "./LoginPageStyle";
 
 export const LoginPage = () => {

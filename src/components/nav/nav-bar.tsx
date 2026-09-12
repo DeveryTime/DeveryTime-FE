@@ -1,28 +1,25 @@
-/** @jsxImportSource @emotion/react */
-
 import {
-  logoName,
+  cateGory,
+  login,
   logo,
-  navStyle,
+  logoName,
+  navCatalog,
   navGap,
+  navStyle,
   search,
   searchIcon,
   searchInput,
-  login,
-  cateGory,
-  navCatalog,
 } from "./nav-bar.styles";
-
 import logoIcon from "../../icons/logoIcon.svg";
 import profile from "../../icons/profile.svg";
 
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const [signUp, setSignUp] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage] = useState("");
 
   const navigate = useNavigate();
 
@@ -106,20 +103,22 @@ const NavBar = () => {
 
       <div css={navCatalog}>
         <div css={cateGory}>
-          <div>전공</div>
-          <div>일상</div>
-          <div>교과</div>
-          <div>급식</div>
-          <div>프로젝트</div>
-          <div>기숙사</div>
-          <div>분실물</div>
+          <Link to={"/major"}>전공</Link>
+          <Link to={"/daily"}>일상</Link>
+          <Link to={"/subject"}>교과</Link>
+          <Link to={"/schoolMeal"}>급식</Link>
+          <Link to={"/project"}>프로젝트</Link>
+          <Link to={"/dormitory"}>기숙사</Link>
+          <Link to={"/lostItem"}>분실물</Link>
         </div>
 
         <div>
           {signUp ? (
             <img src={profileImage || profile} alt="프로필" />
           ) : (
-            <button css={login}>로그인</button>
+            <Link to={"/login"}>
+              <button css={login}>로그인</button>
+            </Link>
           )}
         </div>
       </div>

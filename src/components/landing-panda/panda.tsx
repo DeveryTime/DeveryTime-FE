@@ -1,14 +1,13 @@
-/** @jsxImportSource @emotion/react */
 import { Zoom } from "react-awesome-reveal";
 import {
   backgroundCss,
-  starCss,
+  glitterCss,
   panda1Css,
   panda2Css,
-  glitterCss,
   panda3Css,
-  starCss2,
   panda4Css,
+  starCss,
+  starCss2,
 } from "./panda.style";
 
 import panda1 from "../../icons/panda1.svg";

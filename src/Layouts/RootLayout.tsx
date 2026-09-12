@@ -1,5 +1,11 @@
 import { Outlet } from "react-router-dom";
+import NavBar from "../components/nav/nav-bar.tsx";
 
 export const RootLayout = () => {
-  return <Outlet />;
+  return (
+    <>
+      <NavBar />
+      <Outlet />
+    </>
+  );
 };
