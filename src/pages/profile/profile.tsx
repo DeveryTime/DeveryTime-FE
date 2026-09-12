@@ -48,11 +48,14 @@ const Profile = () => {
     profileImageUrl: "https://via.placeholder.com/150",
   });
 
-  // 저장이 가능한지 확인하는 state
-  const [canSave, setCanSave] = useState(false);
-
   // 수정할 아이디
   const [username, setUsername] = useState("hong123");
+
+  //아이디 변경 판단 기능
+  const canSave = username.trim() !==user?.username && Boolean(user) && username.trim().length <= 10 && username.trim().length > 0;
+
+  
+
   // 새로 선택한 프로필 이미지
   const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
   // 숨겨진 파일 input을 직접 클릭하기 위한 ref
@@ -70,10 +73,35 @@ const Profile = () => {
   // 저장하기
   const handleSave = () => {
     // 백엔드 연결 전에는 일단 저장 성공 메시지만 표시
-    console.log("변경된 아이디:", username);
-    console.log("새 프로필 이미지:", newProfileImage);
+    const trimmedUsername = username.trim();
 
-    toast.success("변경사항이 저장되었습니다.");
+    if (!trimmedUsername||trimmedUsername.length === 0) {
+      toast.error("아이디를 입력해주세요");
+
+      return;
+    } else if (trimmedUsername.length > 10) {
+      toast.error("아이디는 1 ~ 10글자 이내로 입력해주세요");
+
+      return;
+    }
+
+    if(!user) return;
+
+
+    setUser((prevUser) => {
+    if (!prevUser) return prevUser;
+
+    return {
+      ...prevUser,
+      username: trimmedUsername,
+    };
+  });
+
+  setUsername(trimmedUsername);
+  toast.success("변경사항이 저장되었습니다.");
+
+
+
 
     /*
     // 나중에 백엔드 연결 시 사용할 코드
@@ -160,7 +188,7 @@ const Profile = () => {
           </div>
 
           {/* 저장 버튼 */}
-          <button css={saveBtn} onClick={handleSave}>
+          <button css={saveBtn} onClick={handleSave} disabled={!canSave}>
             변경사항 저장
           </button>
         </div>

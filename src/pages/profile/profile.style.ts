@@ -124,6 +124,13 @@ export const saveBtn = css`
   &:hover {
     background: #2855d9;
   }
+
+  &:disabled {
+
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
 `;
 
 export const nsaveBtn = css`

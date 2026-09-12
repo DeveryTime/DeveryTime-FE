@@ -15,23 +15,18 @@ import {
 import logoIcon from "../../icons/logoIcon.svg";
 import profile from "../../icons/profile.svg";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
-  const [signUp, setSignUp] = useState(false);
+  const [signUp] = useState(
+  () => Boolean(localStorage.getItem("token"))
+);
   const [searchValue, setSearchValue] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage] = useState("");
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      setSignUp(true);
-    }
-  }, []);
 
   // 백엔드가 아직 없으므로 일단 주석 처리
   /*
