@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import {
   logoName,
   logo,
@@ -92,6 +94,7 @@ const NavBar = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="lucide lucide-search-icon lucide-search"
             aria-hidden="true"
             onClick={handleSearch}
           >
