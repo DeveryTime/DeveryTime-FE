@@ -2,44 +2,62 @@ import type { PostListItemType } from "../types/post";
 import type { PostDetailResponse } from "../types/post";
 import type { PostComment } from "../types/post";
 
-// API 연결 전까지 게시글 목록 화면에서 사용할 임시 데이터다.
+export const mockCategories = [
+  { id: 1, name: "컴퓨터공학" },
+  { id: 2, name: "디자인" },
+  { id: 3, name: "경영" },
+] as const;
+
+const mockTitles = [
+  "피그마 오토 레이아웃 할 줄 아시는 분 있나요?",
+  "전공 과제 같이 하실 분 구합니다.",
+  "이번 학기 수업 어떤가요?",
+];
+
 export const mockPosts: PostListItemType[] = Array.from(
   { length: 10 },
-  (_, index) => ({
-    id: index + 1,
-    number: index + 1,
-    category: "전공",
-    title: "피그마 오토 레이아웃 할 줄 아시는 분 있나요?",
-    createdAt: "2026.05.24",
-  }),
+  (_, index) => {
+    const category = mockCategories[index % mockCategories.length];
+
+    return {
+      id: index + 1,
+      number: index + 1,
+      categoryId: category.id,
+      category: category.name,
+      title: mockTitles[index % mockTitles.length],
+      createdAt: `2026.05.${String(24 - index).padStart(2, "0")}`,
+      likeCount: 18 + ((index * 23) % 87),
+      viewCount: 42 + ((index * 41) % 220),
+    };
+  },
 );
 
-// 게시글 상세 모달에서 사용할 임시 상세 데이터다.
-export const mockPostDetail: Record<number, PostDetailResponse> = {
-  1: {
-    id: 1,
-    title: "대마고 님들 하이요",
-    content: "게시글 상세 내용입니다.",
-    status: "PUBLISHED",
-    viewCount: 43,
-
-    writer: {
-      userId: 1,
-      nickname: "엉뚱한 돼지",
-      profileImageUrl: null,
-    },
-
-    category: {
-      id: 1,
-      name: "전공",
-    },
-
-    images: [],
-
-    createdAt: "2026-08-04T12:30:00",
-    updatedAt: null,
-  },
-};
+// 게시글 상세 모달에서 사용할 임시 상세 데이터를 게시글 목록에서 생성한다.
+export const mockPostDetail: Record<number, PostDetailResponse> =
+  Object.fromEntries(
+    mockPosts.map((post) => [
+      post.id,
+      {
+        id: post.id,
+        title: post.title,
+        content: `${post.category} 게시판의 임시 게시글 상세 내용입니다.`,
+        status: "PUBLISHED",
+        viewCount: post.viewCount,
+        writer: {
+          userId: (post.id % 5) + 1,
+          nickname: `전공생${post.id}`,
+          profileImageUrl: null,
+        },
+        category: {
+          id: post.categoryId,
+          name: post.category,
+        },
+        images: [],
+        createdAt: "2026-08-04T12:30:00",
+        updatedAt: null,
+      },
+    ]),
+  );
 
 // 댓글 기능을 확인하기 위한 임시 댓글 데이터다.
 export const mockPostComments: PostComment[] = [
