@@ -1,9 +1,12 @@
 export interface PostListItemType {
   id: number;
   number: number;
+  categoryId: number;
   category: string;
   title: string;
   createdAt: string;
+  likeCount: number;
+  viewCount: number;
 }
 
 // 게시글 정렬 기준으로 사용할 수 있는 값이다.
