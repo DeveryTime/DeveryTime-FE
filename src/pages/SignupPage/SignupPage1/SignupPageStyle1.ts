@@ -49,7 +49,6 @@ export const Button = styled.div`
   font-style: Medium;
   font-family: Pretendard;
 `;
-
 export const LinkText = styled(Link)`
   color: #000000;
   font-size: 20px;
