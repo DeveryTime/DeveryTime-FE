@@ -1,17 +1,13 @@
 import client from "./Clientapi";
 
-/* =========================
-   공통
-========================= */
+//공통
 
 export interface ValidationErrorDetail {
   field: string;
   message: string;
 }
 
-/* =========================
-   로그인
-========================= */
+//로그인
 
 export interface LoginRequest {
   email: string;
@@ -42,10 +38,7 @@ export interface LoginErrorResponse {
   };
 }
 
-/* =========================
-   아이디 중복 확인
-   GET /api/auth/check-username
-========================= */
+//아이디 중복 확인 GET /api/auth/check-username
 
 export interface CheckUsernameResponse {
   success: boolean;
@@ -66,10 +59,7 @@ export interface CheckUsernameErrorResponse {
   };
 }
 
-/* =========================
-   이메일 인증번호 발송
-   POST /api/auth/email-verifications
-========================= */
+//이메일 인증번호 발송 POST /api/auth/email-verifications
 
 export interface SendEmailVerificationRequest {
   email: string;
@@ -97,10 +87,7 @@ export interface SendEmailVerificationErrorResponse {
   };
 }
 
-/* =========================
-   이메일 인증번호 확인
-   POST /api/auth/email-verifications/verify
-========================= */
+//이메일 인증번호 확인 /POST /api/auth/email-verifications/verify
 
 export interface VerifyEmailRequest {
   email: string;
@@ -129,10 +116,7 @@ export interface VerifyEmailErrorResponse {
   };
 }
 
-/* =========================
-   회원가입
-   POST /api/auth/signup
-========================= */
+//회원가입 POST /api/auth/signup
 
 export interface SignupRequest {
   schoolNumber: string;
@@ -168,24 +152,17 @@ export interface SignupErrorResponse {
   };
 }
 
-/* =========================
-   API 함수
-========================= */
+//API 함수
 
-/**
- * 로그인
- */
+//로그인
 export const loginApi = async (data: LoginRequest): Promise<LoginResponse> => {
   const response = await client.post<LoginResponse>("/api/auth/login", data);
 
   return response.data;
 };
 
-/**
- * 아이디 중복 확인
- *
- * GET /api/auth/check-username?username=아이디
- */
+//아이디 중복 확인  GET /api/auth/check-username?username=아이디
+
 export const checkUsernameApi = async (
   username: string,
 ): Promise<CheckUsernameResponse> => {
@@ -201,9 +178,8 @@ export const checkUsernameApi = async (
   return response.data;
 };
 
-/**
- * 이메일 인증번호 발송
- */
+//이메일 인증번호 발송
+
 export const sendEmailVerificationApi = async (
   data: SendEmailVerificationRequest,
 ): Promise<SendEmailVerificationResponse> => {
@@ -215,9 +191,8 @@ export const sendEmailVerificationApi = async (
   return response.data;
 };
 
-/**
- * 이메일 인증번호 확인
- */
+//이메일 인증번호 확인
+
 export const verifyEmailApi = async (
   data: VerifyEmailRequest,
 ): Promise<VerifyEmailResponse> => {
@@ -229,9 +204,7 @@ export const verifyEmailApi = async (
   return response.data;
 };
 
-/**
- * 회원가입
- */
+//회원가입
 export const signupApi = async (
   data: SignupRequest,
 ): Promise<SignupResponse> => {
