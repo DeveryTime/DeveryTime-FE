@@ -1,4 +1,4 @@
-import client from "./Clientapi";
+import clientApi from "./Clientapi";
 
 /**
  * 게시글 상태
@@ -58,7 +58,7 @@ export interface CreatePostErrorResponse {
 export const createPostApi = async (
   data: CreatePostRequest,
 ): Promise<CreatePostResponse> => {
-  const response = await client.post<CreatePostResponse>("/api/posts", data);
+  const response = await clientApi.post<CreatePostResponse>("/api/posts", data);
 
   return response.data;
 };
