@@ -7,14 +7,13 @@ import PostPagination from "../components/PostPagination";
 import PostDetailModal from "../components/PostDetailModal";
 
 import { mockPosts, mockPostDetail } from "../data/mockPosts";
-import type { PostSort } from "../types/post";
+import type { PostDetailResponse, PostSort } from "../types/post";
+import { PAGE_SIZE } from "../../../constants/pagination";
 
 interface CategoryPageProps {
   categoryId: number;
   categoryName: string;
 }
-
-const postsPerPage = 10;
 
 function parseMockDate(dateString: string) {
   const [year, month, day] = dateString.split(".").map(Number);
@@ -25,7 +24,8 @@ function CategoryPage({ categoryId, categoryName }: CategoryPageProps) {
   const [selectedSort, setSelectedSort] = useState<PostSort>("latest");
   const [currentPage, setCurrentPage] = useState(1);
   const [posts, setPosts] = useState(mockPosts);
-  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  const [selectedPost, setSelectedPost] =
+    useState<PostDetailResponse | null>(null);
 
   // 현재 카테고리에 해당하는 게시글만 남긴다.
   const filteredPosts = posts.filter((post) => post.categoryId === categoryId);
@@ -34,12 +34,12 @@ function CategoryPage({ categoryId, categoryName }: CategoryPageProps) {
   const sortedPosts = [...filteredPosts];
 
   if (selectedSort === "likes") {
-    sortedPosts.sort((firstPost, secondPost) =>
-      secondPost.likeCount - firstPost.likeCount,
+    sortedPosts.sort(
+      (firstPost, secondPost) => secondPost.likeCount - firstPost.likeCount,
     );
   } else if (selectedSort === "views") {
-    sortedPosts.sort((firstPost, secondPost) =>
-      secondPost.viewCount - firstPost.viewCount,
+    sortedPosts.sort(
+      (firstPost, secondPost) => secondPost.viewCount - firstPost.viewCount,
     );
   } else {
     sortedPosts.sort(
@@ -49,29 +49,38 @@ function CategoryPage({ categoryId, categoryName }: CategoryPageProps) {
     );
   }
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(sortedPosts.length / postsPerPage),
-  );
+  const totalPages = Math.max(1, Math.ceil(sortedPosts.length / PAGE_SIZE));
 
   const pageToRender = Math.min(currentPage, totalPages);
 
   const visiblePosts = sortedPosts.slice(
-    (pageToRender - 1) * postsPerPage,
-    pageToRender * postsPerPage,
+    (pageToRender - 1) * PAGE_SIZE,
+    pageToRender * PAGE_SIZE,
   );
 
-  const selectedPost =
-    selectedPostId !== null &&
-    filteredPosts.some((post) => post.id === selectedPostId)
-      ? mockPostDetail[selectedPostId]
-      : null;
+  function handlePostClick(postId: number) {
+    setSelectedPost(mockPostDetail[postId] ?? null);
+  }
 
   function handlePostDelete(postId: number) {
     setPosts((currentPosts) =>
       currentPosts.filter((post) => post.id !== postId),
     );
-    setSelectedPostId(null);
+    setSelectedPost(null);
+  }
+
+  function handlePostUpdate(postId: number, title: string, content: string) {
+    setPosts((currentPage) =>
+      currentPage.map((currentPost) =>
+        currentPost.id === postId ? { ...currentPost, title } : currentPost,
+      ),
+    );
+
+    setSelectedPost((currentPost) =>
+        currentPost && currentPost.id === postId
+        ? { ...currentPost, title, content }
+        : currentPost,
+    );
   }
 
   return (
@@ -92,7 +101,7 @@ function CategoryPage({ categoryId, categoryName }: CategoryPageProps) {
         <I.CategoryMeta>게시글 {filteredPosts.length}개</I.CategoryMeta>
 
         {visiblePosts.length > 0 ? (
-          <PostTable posts={visiblePosts} onPostClick={setSelectedPostId} />
+          <PostTable posts={visiblePosts} onPostClick={handlePostClick} />
         ) : (
           <I.EmptyMessage role="status">
             아직 등록된 게시글이 없습니다.
@@ -102,8 +111,9 @@ function CategoryPage({ categoryId, categoryName }: CategoryPageProps) {
         {selectedPost && (
           <PostDetailModal
             post={selectedPost}
-            onClose={() => setSelectedPostId(null)}
+            onClose={() => setSelectedPost(null)}
             onDelete={handlePostDelete}
+            onUpdate={handlePostUpdate}
           />
         )}
 

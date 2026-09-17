@@ -49,7 +49,7 @@ const CategoryLabel = styled.span`
   display: inline-block;
   position: absolute;
   top: 50px;
-  left: 740px;
+  right: 100px;
   font-size: 14px;
   background-color: ${colors.gray[50]};
   color: ${colors.gray[700]};
@@ -138,16 +138,12 @@ const PostMenuPopover = styled.div`
 
 const ReportPopoverLink = styled.a`
   display: block;
-  position: absolute;
-  z-index: 10;
   background-color: ${colors.gray[0]};
-  box-shadow: 0.1px 0.1px 0.1px 1px ${colors.gray[1000]};
   border-radius: 10px;
-  width: 209px;
-  padding: 20px 123px 20px 16px;
-
-  top: 75px;
-  right: 45px;
+  width: 100%;
+  padding: 12px; 16px;
+  text-align: left;
+  white-space: nowrap;
 
   &:hover {
     background-color: ${colors.red[50]};
@@ -243,6 +239,13 @@ const ReactionBar = styled.div`
   padding-bottom: 8px;
 `;
 
+const LikeArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex-shrink: 0;
+`;
 const LikeButton = styled.button`
   display: flex;
   align-items: center;
@@ -253,6 +256,13 @@ const LikeCount = styled.span`
   font-size: 20px;
   font-weight: 500;
   padding-top: 3px;
+`;
+
+const LikeError = styled.span`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${colors.red[600]};
+  white-space: normal;
 `;
 
 const CommentInfo = styled.div`
@@ -574,8 +584,10 @@ const PostDetailModalStyles = {
   PostEditActions,
   PostEditCancelButton,
   ReactionBar,
+  LikeArea,
   LikeButton,
   LikeCount,
+  LikeError,
   CommentInfo,
   CommentImage,
   CommentCount,

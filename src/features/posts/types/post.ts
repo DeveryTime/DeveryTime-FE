@@ -1,3 +1,4 @@
+
 export interface PostListItemType {
   id: number;
   number: number;
@@ -24,8 +25,7 @@ export interface PostListParams {
 export interface PostListResponseItem {
   id: number;
   title: string;
-  writerNickname: string;
-  viewCount: number;
+  category: string;
   createdAt: string;
 }
 
@@ -36,6 +36,18 @@ export interface PostListResponse {
   size: number;
   totalElements: number;
   totalPages: number;
+}
+
+export interface UpdatePostRequest {
+  userId: number;
+  title: string;
+  content: string;
+}
+
+export interface UpdatePostResponse {
+  id: number;
+  title: string;
+  updatedAt: string;
 }
 
 // 게시글 작성자 정보의 형태다.
@@ -100,4 +112,12 @@ export interface PostComment {
 export interface PostCommentListResponse {
   success: boolean;
   data: PostComment[];
+}
+
+export interface PostTableItem {
+  id: number;
+  number: number;
+  category: string;
+  title: string;
+  createdAt: string;
 }

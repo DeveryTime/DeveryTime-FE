@@ -14,6 +14,7 @@ interface PostPaginationProps {
   onChange: (page: number) => void;
 }
 
+
 function PostPagination({
   currentPage,
   totalPages,
@@ -76,7 +77,7 @@ function PostPagination({
       </D.PageButton>
 
       <D.PageButton
-       type="button"
+        type="button"
         onClick={() => onChange(totalPages)}
         disabled={currentPage === totalPages}
         aria-label="마지막 페이지로 이동"

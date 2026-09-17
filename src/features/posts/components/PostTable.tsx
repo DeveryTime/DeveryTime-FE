@@ -1,8 +1,8 @@
-import type { PostListItemType } from "../types/post";
+import type { PostTableItem } from "../types/post";
 import G from "../../../styles/PostTable.styles";
 
 interface PostTableProps {
-  posts: PostListItemType[];
+  posts: PostTableItem[];
   onPostClick: (postId: number) => void;
 }
 
@@ -22,7 +22,7 @@ function PostTable({ posts, onPostClick }: PostTableProps) {
       <tbody>
         {posts.map((post) => (
           // 행을 클릭하면 선택한 게시글의 ID를 부모 컴포넌트에 전달한다.
-          <G.TableRow key={post.id} onClick={() => onPostClick(post.id)}>
+          <G.TableRow key={post.id} onClick={() => onPostClick(post.id)} >
             <G.TableCell> {post.number} </G.TableCell>
             <G.TableCell> {post.category} </G.TableCell>
             <G.TableCell> {post.title} </G.TableCell>
