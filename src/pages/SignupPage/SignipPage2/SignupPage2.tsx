@@ -38,7 +38,6 @@ interface SignupPage2Data {
 
 export const SignupPage2 = () => {
   const navigate = useNavigate();
-
   const location = useLocation();
   const prevData = location.state as SignupPage2Data | null;
   const [email, setEmail] = useState<string>("");
@@ -59,9 +58,6 @@ export const SignupPage2 = () => {
     setTime(0);
   };
 
-  // 인증번호 받기
-  const handleSendCode = () => {
-    if (email === "") {
   //인증번호 발송
 
   const handleSendCode = async (): Promise<void> => {
@@ -70,8 +66,6 @@ export const SignupPage2 = () => {
       return;
     }
 
-    if (!email.endsWith("@dsm.hs.kr")) {
-      alert("학교 이메일(@dsm.hs.kr)을 입력해주세요.");
     if (cooldown > 0) {
       return;
     }
@@ -86,8 +80,6 @@ export const SignupPage2 = () => {
       setTime(300);
       setCooldown(60);
 
-    // 기존 인증번호 삭제
-    setVerificationCode("");
       setVerificationCode("");
       setIsVerified(false);
 
@@ -103,8 +95,6 @@ export const SignupPage2 = () => {
 
         const errorCode = errorResponse.error.code;
 
-    // 나중에 백엔드 인증번호 API 연결
-    alert("인증번호가 전송되었습니다.");
         if (errorCode === "EMAIL_ALREADY_EXISTS") {
           alert("이미 가입된 이메일입니다.");
         } else if (errorCode === "TOO_MANY_REQUESTS") {
@@ -142,19 +132,16 @@ export const SignupPage2 = () => {
 
   //인증번호 유효시간
 
-  // 타이머
   useEffect(() => {
     if (time <= 0) {
       return;
     }
 
     const timer = setInterval(() => {
-      setTime((prev) => {
       setTime((prev: number) => {
         if (prev <= 1) {
           clearInterval(timer);
           setVerificationCode("");
-          alert("인증번호가 만료되었습니다. 이메일 인증을 다시 해주세요.");
           setIsVerified(false);
           return 0;
         }
@@ -168,15 +155,6 @@ export const SignupPage2 = () => {
     };
   }, [time]);
 
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-
-  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
-    seconds,
-  ).padStart(2, "0")}`;
-
-  // 인증번호 입력
-  const handleVerificationCode = (e: React.ChangeEvent<HTMLInputElement>) => {
   //인증번호 입력
 
   const handleVerificationCode = (
@@ -196,9 +174,6 @@ export const SignupPage2 = () => {
     setIsVerified(false);
   };
 
-  // 회원가입 버튼
-  const handleSignup = () => {
-    if (email === "") {
   //인증번호 확인
 
   const handleVerifyCode = async (): Promise<void> => {
@@ -207,25 +182,11 @@ export const SignupPage2 = () => {
       return;
     }
 
-    if (!email.endsWith("@dsm.hs.kr")) {
-      alert("학교 이메일(@dsm.hs.kr)을 입력해주세요.");
-      return;
-    }
-
-    if (verificationCode === "") {
-      alert("인증번호를 입력해주세요.");
-      return;
-    }
-
     if (verificationCode.length !== 6) {
       alert("인증번호 6자리를 입력해주세요.");
       return;
     }
 
-    if (time === 0) {
-      alert("인증번호가 만료되었습니다. 이메일 인증을 다시 해주세요.");
-      return;
-    }
     try {
       setIsVerifying(true);
 
@@ -248,7 +209,6 @@ export const SignupPage2 = () => {
           return;
         }
 
-    navigate("/signup/3");
         const errorCode = errorResponse.error.code;
 
         if (errorCode === "EMAIL_ALREADY_VERIFIED") {
@@ -322,10 +282,8 @@ export const SignupPage2 = () => {
             <EmailInput
               placeholder="이메일"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
               onChange={handleEmailChange}
             />
-            <VerifyButton onClick={handleSendCode}>인증번호 받기</VerifyButton>
 
             <VerifyButton
               onClick={handleSendCode}
@@ -348,16 +306,6 @@ export const SignupPage2 = () => {
 
             <Timer>{formattedTime}</Timer>
           </VerificationArea>
-          <VerificationText>인증번호 6자리를 입력하세요</VerificationText>
-          <Button
-            onClick={
-              verificationCode.length === 6 ? handleSignup : handleSendCode
-            }
-          >
-            {verificationCode.length === 6
-              ? "회원가입"
-              : "이메일 인증 다시하기"}
-          </Button>
 
           <VerificationText>
             {isVerified

@@ -1,29 +1,27 @@
 import { useState } from "react";
-import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowBack, IoMdLock } from "react-icons/io";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IoMdLock } from "react-icons/io";
 import axios from "axios";
-import { BackgroundLayer } from "../../BackgroundActStyle";
+import { BackgroundLayer, ContentLayer } from "../../BackgroundActStyle";
 import { Background } from "../../BackgroundAct";
-import { ContentLayer } from "../../BackgroundActStyle";
-import { signupApi } from "../../../api/Authapi";
 import type { SignupErrorResponse } from "../../../api/Authapi";
+import { signupApi } from "../../../api/Authapi";
 
 import {
-  SignupWrapper,
-  CardBox,
-  TopArea,
   BackButton,
-  Title,
+  Button,
+  CardBox,
+  EyeButton,
+  LinkText,
   PasswordArea,
   PasswordInput,
-  EyeButton,
   PasswordText,
-  Button,
   QuestionText,
   Qusetion,
-  LinkText,
+  SignupWrapper,
+  Title,
+  TopArea
 } from "./SignupPageStyle3";
 
 interface SignupPage3Data {
@@ -44,7 +42,7 @@ export const SignupPage3 = () => {
     useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
- //회원가입
+  //회원가입
   const handleSignup = async (): Promise<void> => {
     if (!prevData) {
       alert("회원가입 정보를 찾을 수 없습니다.");
@@ -54,11 +52,6 @@ export const SignupPage3 = () => {
 
     if (password === "") {
       alert("비밀번호를 입력해주세요.");
-      return;
-    }
-
-    if (password.length < 8 || password.length > 20) {
-      alert("비밀번호는 8~20자리여야 합니다.");
       return;
     }
 
@@ -77,7 +70,6 @@ export const SignupPage3 = () => {
       return;
     }
 
-    // 나중에 백엔드 회원가입 API 연결
     try {
       setIsSubmitting(true);
       const res = await signupApi({
@@ -95,8 +87,6 @@ export const SignupPage3 = () => {
       if (axios.isAxiosError<SignupErrorResponse>(error)) {
         const errorResponse = error.response?.data;
 
-    alert("회원가입이 완료되었습니다.");
-    navigate("/main");
         if (!errorResponse) {
           alert("서버와 통신할 수 없습니다.");
           return;
@@ -149,7 +139,6 @@ export const SignupPage3 = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <EyeButton onClick={() => setShowPassword(!showPassword)}>
             <EyeButton
               type="button"
               onClick={() => setShowPassword((prev: boolean) => !prev)}
@@ -170,14 +159,12 @@ export const SignupPage3 = () => {
             />
 
             <EyeButton
-              onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
               type="button"
               onClick={() => setShowPasswordConfirm((prev: boolean) => !prev)}
             >
               {showPasswordConfirm ? <IoEyeOutline /> : <IoEyeOffOutline />}
             </EyeButton>
           </PasswordArea>
-          <Button onClick={handleSignup}>회원가입</Button>
 
           <Button onClick={handleSignup} disabled={isSubmitting}>
             {isSubmitting ? "회원가입 중..." : "회원가입"}

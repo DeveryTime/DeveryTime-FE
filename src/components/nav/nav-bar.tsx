@@ -8,7 +8,7 @@ import {
   navStyle,
   search,
   searchIcon,
-  searchInput,
+  searchInput
 } from "./nav-bar.styles";
 import logoIcon from "../../icons/logoIcon.svg";
 import profile from "../../icons/profile.svg";
@@ -20,6 +20,16 @@ const NavBar = () => {
   const [signUp, setSignUp] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [profileImage] = useState("");
+
+  const CATEGORIES = [
+    {id: 1, name: "전공"},
+    {id: 2, name: "일상"},
+    {id: 3, name: "교과"},
+    {id: 4, name: "급식"},
+    {id: 5, name: "프로젝트"},
+    {id: 6, name: "기숙사"},
+    {id: 7, name: "분실물"}
+  ]
 
   const navigate = useNavigate();
 
@@ -54,7 +64,6 @@ const NavBar = () => {
 
   const handleSearch = () => {
     if (!searchValue.trim()) return;
-
     navigate(`/search?keyword=${encodeURIComponent(searchValue)}`);
   };
 
@@ -103,15 +112,12 @@ const NavBar = () => {
 
       <div css={navCatalog}>
         <div css={cateGory}>
-          <Link to={"/major"}>전공</Link>
-          <Link to={"/daily"}>일상</Link>
-          <Link to={"/subject"}>교과</Link>
-          <Link to={"/schoolMeal"}>급식</Link>
-          <Link to={"/project"}>프로젝트</Link>
-          <Link to={"/dormitory"}>기숙사</Link>
-          <Link to={"/lostItem"}>분실물</Link>
+                   {CATEGORIES.map((category) => (
+            <Link key={category.id} to={`/category/${category.id}`}>
+              {category.name}
+            </Link>
+          ))}
         </div>
-
         <div>
           {signUp ? (
             <img src={profileImage || profile} alt="프로필" />

@@ -8,9 +8,6 @@ function App() {
     <>
       <GlobalStyle />
       <RouterProvider router={router} />
-      {/*<NavBar />*/}
-      {/*<PostMainPage />*/}
-      {/*  <Landing />*/}
     </>
   );
 }

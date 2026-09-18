@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import axios from "axios";
 import * as S from "./search-page.style";
 
 interface SearchPost {
@@ -59,7 +58,7 @@ export function SearchPage() {
     fetchSearchResults();
     */
 
-    // 목업 데이터 필터링 로직
+    // 목업 데이터 필터링
     const filteredMock: SearchPost[] = MOCK_SEARCH_DATA.filter((post) =>
       post.title.includes(keyword),
     );
