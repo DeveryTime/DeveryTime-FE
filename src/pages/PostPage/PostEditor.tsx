@@ -9,7 +9,7 @@ import { IoClose, IoImageOutline, IoLinkOutline } from "react-icons/io5";
 import axios from "axios";
 import { createPostApi } from "../../api/Postapi";
 import type { CreatePostErrorResponse } from "../../api/Postapi";
-
+import { Markdown } from "@tiptap/markdown";
 import {
   ModalOverlay,
   EditorWrapper,
@@ -39,6 +39,7 @@ export const PostEditor = ({ onClose, categoryId }: PostEditorProps) => {
     extensions: [
       StarterKit,
       Underline,
+      Markdown,
 
       Link.configure({
         openOnClick: false,
@@ -128,7 +129,7 @@ export const PostEditor = ({ onClose, categoryId }: PostEditorProps) => {
 
       //Tiptap HTML을 문자열로 변환
 
-      const content: string = editor.getHTML();
+      const content: string = editor.getMarkdown();
 
       //게시글 작성 API
 
