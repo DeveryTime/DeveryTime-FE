@@ -12,7 +12,7 @@ export const ModalOverlay = styled.div`
   justify-content: center;
   background: rgba(0, 0, 0, 0.2);
   z-index: 9999;
-`;
+`;k
 
 export const EditorWrapper = styled.div`
   width: 700px;
