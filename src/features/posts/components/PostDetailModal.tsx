@@ -1,24 +1,30 @@
-import type { PostDetailResponse } from "../types/post";
-import { useState, useRef, useEffect, type FormEvent } from "react";
+import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import S from "../../../styles/PostDetailModal.styles";
-import { X, UserRound, SendHorizontal } from "lucide-react";
+import { X, UserRound } from "lucide-react";
+import MarkdownEditor from "./MarkdownEditor";
 import commentIcon from "../../../assets/icons/comment.svg";
 import likeDefaultIcon from "../../../assets/icons/Like.svg";
 import likeActiveIcon from "../../../assets/icons/Like-active.svg";
 import KebabMenu from "../../../assets/icons/Kebab-menu.svg";
-import type { PostComment } from "../types/post";
-import { likePost, unlikePost } from "../../../api/postsApi";
-import { getComments } from "../../../api/postsApi";
-import { createComment } from "../../../api/postsApi";
-import { deleteComment } from "../../../api/postsApi";
-import { patchComment } from "../../../api/postsApi";
-import { updatePost } from "../../../api/postsApi";
+import type {
+  PostComment,
+  UpdatePostRequest,
+  PostDetailResponse,
+} from "../types/post";
+import {
+  getComments,
+  likePost,
+  unlikePost,
+  updatePost,
+} from "../../../api/postsApi";
 
 interface PostDetailModalProps {
   post: PostDetailResponse;
   onClose: () => void;
   onDelete: (postId: number) => void;
-  onUpdate: (postId: number, title: string, content: string) => void;
+  onUpdate?: (postId: number, title: string, content: string) => void;
+  isLikeEnabled?: boolean;
 }
 
 // 게시글 작성일을 상세 모달에 표시할 형식으로 변환한다.
@@ -53,165 +59,74 @@ function PostDetailModal({
   onClose,
   onDelete,
   onUpdate,
+  isLikeEnabled = true,
 }: PostDetailModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   // 좋아요 상태와 게시글의 좋아요 개수를 관리한다.
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
+  const [isLiked, setIsLiked] = useState(post.liked);
+  const [likeCount, setLikeCount] = useState(post.likeCount);
   const [isLikeLoading, setIsLikeLoading] = useState(false);
+  const [likeError, setLikeError] = useState<string | null>(null);
 
   // 게시글 메뉴와 댓글 메뉴의 열림 상태를 관리한다.
   const [isPostMenuOpen, setIsPostMenuOpen] = useState(false);
   const [openCommentMenuId, setOpenCommentMenuId] = useState<number | null>(
     null,
   );
-  const [isError, setIsError] = useState<string | null>(null);
 
-  // 댓글 목록과 댓글 입력값을 관리한다.
+  // API에서 조회한 댓글 목록과 댓글 조회 상태를 관리한다.
   const [comments, setComments] = useState<PostComment[]>([]);
-  const [commentText, setCommentText] = useState("");
-
-  // 댓글 수정 모드와 수정 중인 댓글 내용을 관리한다.
-  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
-  const [editingCommentText, setEditingCommentText] = useState("");
+  const [isCommentLoading, setIsCommentLoading] = useState(false);
+  const [isCommentError, setIsCommentError] = useState<string | null>(null);
 
   // 게시글 수정 모드 여부를 관리한다.
   const [isPostEditing, setIsPostEditing] = useState(false);
   const [editingPostTitle, setEditingPostTitle] = useState("");
   const [editingPostContent, setEditingPostContent] = useState("");
-  const [isPostEditError, setIsPostEditError] = useState<string | null>(null);
-
-  const [isCommentError, setIsCommentError] = useState<string | null>(null);
-  const [isCommentLoading, setIsCommentLoading] = useState(false);
-  const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
+  const [postUpdateError, setPostUpdateError] = useState<string | null>(null);
 
   // 현재 로그인한 사용자의 ID라고 가정한 값이다.
   const currentUserId = 1;
 
-  // 좋아요 버튼을 클릭하면 좋아요 상태와 개수를 함께 변경한다.
+  // 좋아요 등록·취소 API를 호출하고 성공했을 때만 화면 상태를 변경한다.
   async function handleLikeClick() {
-    setIsError(null);
+    if (!isLikeEnabled || isLikeLoading) {
+      return;
+    }
+
+    setLikeError(null);
     setIsLikeLoading(true);
+
     try {
       const likeResult = isLiked
         ? await unlikePost(post.id)
         : await likePost(post.id);
 
-      setIsLiked(likeResult.liked);
+      setLikeCount((previous) => {
+        if (likeResult.liked === isLiked) {
+          return previous;
+        }
 
-      setLikeCount((previous) =>
-        likeResult.liked ? previous + 1 : Math.max(0, previous - 1),
-      );
+        return likeResult.liked
+          ? previous + 1
+          : Math.max(0, previous - 1);
+      });
+      setIsLiked(likeResult.liked);
     } catch {
-      setIsError("좋아요 상호작용에 실패했습니다.");
+      setLikeError("좋아요 처리에 실패했습니다.");
     } finally {
       setIsLikeLoading(false);
     }
   }
 
-  useEffect(() => {
-    async function fetchComments() {
-      setIsCommentError(null);
-      setIsCommentLoading(true);
-      try {
-        const commentsResponse = await getComments(post.id);
-
-        setComments(commentsResponse.data);
-      } catch {
-        setIsCommentError("댓글을 불러오는데 실패하였습니다");
-      } finally {
-        setIsCommentLoading(false);
-      }
-    }
-    fetchComments();
-  }, [post.id]);
-
-  // 댓글을 삭제하고 열려 있던 댓글 메뉴를 닫는다.
-  async function handleCommentDelete(commentId: number) {
-    try {
-      await deleteComment(post.id, commentId);
-      setComments((currentComments) =>
-        currentComments.filter((comment) => comment.id !== commentId),
-      );
-      setOpenCommentMenuId(null);
-    } catch {
-      setIsCommentError("댓글을 삭제하는데 실패하였습니다.");
-    }
-  }
-
-  // 댓글 수정 모드를 시작하고 기존 댓글 내용을 입력창에 넣는다.
-  function handleCommentEditStart(comment: PostComment) {
-    setEditingCommentId(comment.id);
-    setEditingCommentText(comment.content);
-
-    setOpenCommentMenuId(null);
-  }
-
-  // 댓글 수정 모드를 취소하고 수정 관련 상태를 초기화한다.
-  function handleCommentEditCancel() {
-    setEditingCommentId(null);
-    setEditingCommentText("");
-  }
-
-  // 수정된 댓글 내용을 목록에 반영한다.
-  async function handleCommentEditSave(commentId: number) {
-    const trimmedEditComment = editingCommentText.trim();
-
-    if (trimmedEditComment === "") {
-      return;
-    }
-
-    try {
-      await patchComment(post.id, commentId, trimmedEditComment);
-      setComments((editComments) =>
-        editComments.map((editComment) =>
-          editComment.id === commentId
-            ? { ...editComment, content: trimmedEditComment }
-            : editComment,
-        ),
-      );
-      handleCommentEditCancel();
-    } catch {
-      setIsCommentError("댓글을 수정하는데 실패하였습니다.");
-    }
-  }
-
   // 게시글 수정 모드를 시작하고 게시글 메뉴를 닫는다.
   function handlePostEditStart() {
-    setEditingPostTitle(post.title);
-    setEditingPostContent(post.content);
     setIsPostEditing(true);
     setIsPostMenuOpen(false);
-  }
-
-  function handlePostEditCancel() {
     setEditingPostTitle(post.title);
     setEditingPostContent(post.content);
-    setIsPostEditError(null);
-    setIsPostEditing(false);
-  }
-
-  async function handlePostEditSave() {
-    const trimmedEditTitle = editingPostTitle.trim();
-
-    if (trimmedEditTitle === "") {
-      return;
-    }
-
-    setIsPostEditError(null);
-
-    try {
-      await updatePost(post.id, {
-        userId: currentUserId,
-        title: trimmedEditTitle,
-        content: editingPostContent,
-      });
-      onUpdate(post.id, trimmedEditTitle, editingPostContent);
-      setIsPostEditing(false);
-    } catch {
-      setIsPostEditError("게시물을 수정하는데 실패하였습니다.");
-    }
+    setPostUpdateError(null);
   }
 
   // 모달이 처음 렌더링되면 다이얼로그를 화면에 표시한다.
@@ -223,30 +138,47 @@ function PostDetailModal({
     }
   }, []);
 
-  // 댓글 작성 폼을 제출해 새 댓글을 목록에 추가한다.
-  const handleCommentSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const trimmedComment = commentText.trim();
+  useEffect(() => {
+    async function fetchComments() {
+      setIsCommentLoading(true);
+      setIsCommentError(null);
 
-    if (trimmedComment === "") {
+      try {
+        const response = await getComments(post.id);
+        setComments(response.data);
+      } catch {
+        setIsCommentError(" 댓글을 조회하는데 실패하셨습니다. ");
+      } finally {
+        setIsCommentLoading(false);
+      }
+    }
+    fetchComments();
+  }, [post.id]);
+
+  async function handlePostEditSave() {
+    const trimmedPostTitle = editingPostTitle.trim();
+    const trimmedPostContent = editingPostContent.trim();
+
+    setPostUpdateError(null);
+
+    if (trimmedPostTitle === "" || trimmedPostContent === "") {
       return;
     }
 
-    setIsCommentError(null);
-    setIsCommentSubmitting(true);
-
+    const updateData: UpdatePostRequest = {
+      userId: post.writer.userId,
+      title: trimmedPostTitle,
+      content: trimmedPostContent,
+    };
     try {
-      const newComment = await createComment(post.id, trimmedComment);
+      await updatePost(post.id, updateData);
 
-      setComments((previous) => [...previous, newComment]);
-      setCommentText("");
+      onUpdate?.(post.id, trimmedPostTitle, trimmedPostContent);
+      setIsPostEditing(false);
     } catch {
-      setIsCommentError("댓글 작성에 실패했습니다.");
-    } finally {
-      setIsCommentSubmitting(false);
+      setPostUpdateError(" 게시물을 수정하는데 실패하였습니다. ");
     }
-  };
-
+  }
   return (
     <S.DetailDialog
       ref={dialogRef}
@@ -332,36 +264,50 @@ function PostDetailModal({
           {/* 게시글 본문 또는 게시글 수정 화면 */}
           {isPostEditing ? (
             <S.PostEditForm>
-              <S.PostTitle id="post-detail-title"> 게시글 수정 중 </S.PostTitle>
+              <S.PostTitle id="post-detail-title">게시글 수정</S.PostTitle>
 
               <S.PostEditTitleInput
                 value={editingPostTitle}
-                onChange={(e) => setEditingPostTitle(e.target.value)}
+                onChange={(event) => setEditingPostTitle(event.target.value)}
                 aria-label="게시글 제목"
               />
+
+              <MarkdownEditor
+                value={editingPostContent}
+                onChange={setEditingPostContent}
+              />
+
+              {postUpdateError && <p role="alert">{postUpdateError}</p>}
 
               <S.PostEditActions>
                 <S.PostEditCancelButton
                   type="button"
-                  onClick={handlePostEditCancel}
+                  onClick={() => {
+                    setEditingPostTitle(post.title);
+                    setEditingPostContent(post.content);
+                    setIsPostEditing(false);
+                  }}
                 >
                   취소
                 </S.PostEditCancelButton>
 
-                <S.PostEditCancelButton
+                <S.PostEditSaveButton
                   type="button"
                   onClick={handlePostEditSave}
+                  disabled={
+                    !editingPostTitle.trim() || !editingPostContent.trim()
+                  }
                 >
                   저장
-                </S.PostEditCancelButton>
-
-                {isPostEditError && <p role="alert"> {isPostEditError} </p>}
+                </S.PostEditSaveButton>
               </S.PostEditActions>
             </S.PostEditForm>
           ) : (
             <>
               <S.PostTitle id="post-detail-title"> {post.title} </S.PostTitle>
-              <S.PostContent> {post.content} </S.PostContent>
+              <S.PostContent>
+                <ReactMarkdown>{post.content}</ReactMarkdown>
+              </S.PostContent>
               {post.images.length > 0 && (
                 <S.ImageList>
                   {[...post.images]
@@ -381,29 +327,26 @@ function PostDetailModal({
 
         {/* 좋아요와 댓글 개수 */}
         <S.ReactionBar>
-          <S.LikeArea>
-            <S.LikeButton
-              type="button"
-              onClick={handleLikeClick}
-              aria-pressed={isLiked}
-              aria-label={isLiked ? "좋아요 취소" : "좋아요"}
-              disabled={isLikeLoading}
-            >
-              <img src={isLiked ? likeActiveIcon : likeDefaultIcon} alt="" />
-              <S.LikeCount>{likeCount}</S.LikeCount>
-            </S.LikeButton>
-
-            {isError && <S.LikeError role="alert"> {isError} </S.LikeError>}
-          </S.LikeArea>
+          <S.LikeButton
+            type="button"
+            onClick={handleLikeClick}
+            aria-pressed={isLiked}
+            aria-label={isLiked ? "좋아요 취소" : "좋아요"}
+            disabled={!isLikeEnabled || isLikeLoading}
+          >
+            <img src={isLiked ? likeActiveIcon : likeDefaultIcon} alt="" />
+            <S.LikeCount>{likeCount}</S.LikeCount>
+          </S.LikeButton>
 
           <S.CommentInfo>
             <S.CommentImage src={commentIcon} alt="" />
             <S.CommentCount> {comments.length} </S.CommentCount>
           </S.CommentInfo>
         </S.ReactionBar>
+        {likeError && <p role="alert">{likeError}</p>}
         {/* 댓글 목록과 댓글별 메뉴 */}
         <S.CommentList>
-          {isCommentLoading && <p> 로딩 중입니다...</p>}
+          {isCommentLoading && <p> 댓글을 불러오는 중입니다... </p>}
 
           {!isCommentLoading && !isCommentError && (
             <>
@@ -429,109 +372,43 @@ function PostDetailModal({
                         {CommentDate(comment.createdAt)}
                       </S.CommentDateCreatedAt>
 
-                      <S.CommentButton
-                        type="button"
-                        aria-label="댓글 메뉴"
-                        onClick={() =>
-                          setOpenCommentMenuId((previous) =>
-                            previous === comment.id ? null : comment.id,
-                          )
-                        }
-                        aria-expanded={openCommentMenuId === comment.id}
-                      >
-                        <S.KebabIcon src={KebabMenu} alt="" />
-                      </S.CommentButton>
-                      {openCommentMenuId === comment.id && (
-                        <S.CommentMenuPopover>
-                          {currentUserId !== comment.userId && (
-                            <S.CommentMenuPopoverLink
-                              href="https://docs.google.com/forms/d/e/1FAIpQLSdZfb16smuoFx3K4JUiB-dqX5hKLywfr2FcyAI4KqWuSYdLZg/viewform"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              신고하기
-                            </S.CommentMenuPopoverLink>
-                          )}
-                          {currentUserId === comment.userId && (
-                            <>
-                              <S.CommentDeleteButton
-                                type="button"
-                                onClick={() => handleCommentDelete(comment.id)}
-                                aria-label="댓글 삭제"
+                      {currentUserId !== comment.userId && (
+                        <>
+                          <S.CommentButton
+                            type="button"
+                            aria-label="댓글 메뉴"
+                            onClick={() =>
+                              setOpenCommentMenuId((previous) =>
+                                previous === comment.id ? null : comment.id,
+                              )
+                            }
+                            aria-expanded={openCommentMenuId === comment.id}
+                          >
+                            <S.KebabIcon src={KebabMenu} alt="" />
+                          </S.CommentButton>
+                          {openCommentMenuId === comment.id && (
+                            <S.CommentMenuPopover>
+                              <S.CommentMenuPopoverLink
+                                href="https://docs.google.com/forms/d/e/1FAIpQLSdZfb16smuoFx3K4JUiB-dqX5hKLywfr2FcyAI4KqWuSYdLZg/viewform"
+                                target="_blank"
+                                rel="noopener noreferrer"
                               >
-                                삭제하기
-                              </S.CommentDeleteButton>
-                              <S.CommentEditButton
-                                type="button"
-                                onClick={() => handleCommentEditStart(comment)}
-                              >
-                                {" "}
-                                수정하기{" "}
-                              </S.CommentEditButton>
-                            </>
+                                신고하기
+                              </S.CommentMenuPopoverLink>
+                            </S.CommentMenuPopover>
                           )}
-                        </S.CommentMenuPopover>
+                        </>
                       )}
                     </S.CommentMenuArea>
                   </S.CommentHeader>
-                  {editingCommentId === comment.id ? (
-                    <S.CommentEditArea>
-                      <S.CommentEditTextarea
-                        autoFocus
-                        placeholder="댓글 수정"
-                        value={editingCommentText}
-                        onChange={(e) => setEditingCommentText(e.target.value)}
-                        aria-label="댓글 수정 내용"
-                      />
-
-                      <S.CommentEditActions>
-                        <S.CommentEditCancelButton
-                          type="button"
-                          onClick={handleCommentEditCancel}
-                        >
-                          {" "}
-                          취소
-                        </S.CommentEditCancelButton>
-                        <S.CommentEditSaveButton
-                          type="button"
-                          onClick={() => handleCommentEditSave(comment.id)}
-                          disabled={!editingCommentText.trim()}
-                        >
-                          {" "}
-                          저장{" "}
-                        </S.CommentEditSaveButton>
-                      </S.CommentEditActions>
-                    </S.CommentEditArea>
-                  ) : (
-                    <S.CommentBody> {comment.content} </S.CommentBody>
-                  )}
+                  <S.CommentBody> {comment.content} </S.CommentBody>
                 </S.CommentItem>
               ))}
             </>
           )}
-          {!isCommentLoading && isCommentError && (
-            <p role="alert"> {isCommentError} </p>
-          )}
+          {isCommentError && <p role="alert"> {isCommentError} </p>}
         </S.CommentList>
       </S.ModalScrollArea>
-      {/* 댓글 입력 폼 */}
-      <S.CommentForm onSubmit={handleCommentSubmit}>
-        <S.CommentInput
-          value={commentText}
-          onChange={(e) => setCommentText(e.target.value)}
-          placeholder="댓글"
-          type="text"
-          aria-label="댓글 내용"
-        />
-
-        <S.CommentSubmitButton
-          type="submit"
-          disabled={isCommentSubmitting || !commentText.trim()}
-          aria-label="댓글 등록"
-        >
-          <SendHorizontal size={28} aria-hidden="true" />
-        </S.CommentSubmitButton>
-      </S.CommentForm>
     </S.DetailDialog>
   );
 }

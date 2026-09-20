@@ -17,6 +17,8 @@ const DetailDialog = styled.dialog`
   &::backdrop {
     background-color: ${colors.alpha.black45};
   }
+
+  display: grid;
   &[open] {
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
@@ -41,22 +43,6 @@ const CloseButton = styled.button`
   justify-content: center;
 `;
 
-const DetailContent = styled.div`
-  padding: 40px;
-`;
-
-const CategoryLabel = styled.span`
-  display: inline-block;
-  position: absolute;
-  top: 50px;
-  right: 100px;
-  font-size: 14px;
-  background-color: ${colors.gray[50]};
-  color: ${colors.gray[700]};
-  border-radius: 10px;
-  padding: 10px 16px;
-`;
-
 const PostHeader = styled.header`
   display: flex;
   align-items: center;
@@ -71,6 +57,114 @@ const ProfileImage = styled.img`
   object-fit: cover;
 `;
 
+const PostTitle = styled.h2`
+  margin-top: 35px;
+  font-size: 32px;
+  font-weight: 700;
+  word-break: break-word;
+`;
+
+const PostContent = styled.div`
+  margin-top: 40px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & > :last-child {
+    margin-bottom: 0;
+  }
+
+  p {
+    margin: 16px 0;
+    white-space: pre-wrap;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 24px 0 12px;
+    line-height: 1.35;
+  }
+
+  ul,
+  ol {
+    margin: 16px 0;
+    padding-left: 24px;
+  }
+
+  li + li {
+    margin-top: 4px;
+  }
+
+  blockquote {
+    margin: 16px 0;
+    padding-left: 16px;
+    border-left: 4px solid ${colors.gray[400]};
+    color: ${colors.gray[700]};
+  }
+
+  pre {
+    margin: 16px 0;
+    padding: 16px;
+    overflow-x: auto;
+    border-radius: 8px;
+    background-color: ${colors.gray[100]};
+  }
+
+  code {
+    padding: 2px 4px;
+    border-radius: 4px;
+    background-color: ${colors.gray[100]};
+    font-family: monospace;
+  }
+
+  pre code {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  a {
+    color: ${colors.primary[500]};
+    text-decoration: underline;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 16px 0;
+    border-radius: 8px;
+  }
+`;
+
+const ContentImage = styled.img`
+  display: block;
+  max-width: 100%;
+  height: auto;
+`;
+
+const DetailContent = styled.div`
+  padding: 40px;
+`;
+
+const WriterInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+const WriterName = styled.strong`
+  font-weight: 600;
+`;
+
+const PostMeta = styled.span`
+  color: ${colors.gray[600]};
+  font-size: 14px;
+`;
+
 const DefaultProfileImage = styled.div`
   width: 60px;
   height: 60px;
@@ -83,90 +177,6 @@ const DefaultProfileImage = styled.div`
   flex-shrink: 0;
 `;
 
-const WriterInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-
-const WriterName = styled.strong`
-  font-weight: 600;
-`;
-
-const PostMeta = styled.span`
-  color: ${colors.gray[600]};
-  font-size: 14px;
-`;
-
-const PostMenuArea = styled.div`
-  position: relative;
-  margin-left: auto;
-
-  display: flex;
-  align-items: center;
-`;
-
-const PostMenuButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-`;
-
-const KebabIcon = styled.img`
-  width: 16px;
-  height: 16px;
-  display: block;
-`;
-
-const PostMenuPopover = styled.div`
-  position: absolute;
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  padding: 6px;
-  background-color: ${colors.gray[0]};
-  border: 1px solid ${colors.gray[200]};
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px ${colors.alpha.black12};
-  top: calc(100% + 8px);
-  right: 5px;
-`;
-
-const ReportPopoverLink = styled.a`
-  display: block;
-  background-color: ${colors.gray[0]};
-  border-radius: 10px;
-  width: 100%;
-  padding: 12px; 16px;
-  text-align: left;
-  white-space: nowrap;
-
-  &:hover {
-    background-color: ${colors.red[50]};
-    color: ${colors.red[600]};
-  }
-`;
-
-const PostTitle = styled.h2`
-  margin-top: 35px;
-  font-size: 32px;
-  font-weight: 700;
-  word-break: break-word;
-`;
-
-const PostContent = styled.p`
-  margin-top: 40px;
-  line-height: 1.6;
-
-  white-space: pre-wrap;
-
-  overflow-wrap: anywhere;
-`;
-
 const ImageList = styled.div`
   display: flex;
   flex-direction: column;
@@ -174,57 +184,16 @@ const ImageList = styled.div`
   margin-top: 24px;
 `;
 
-const ContentImage = styled.img`
-  display: block;
-  max-width: 100%;
-  height: auto;
-`;
-
-const PostEditForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const PostEditTitleInput = styled.input`
-  width: 100%;
-
-  height: 42px;
-  padding: 0 16px;
-
-  border: none;
-  border-radius: 999px;
-  outline: none;
-
-  background-color: ${colors.gray[100]};
-  color: ${colors.gray[950]};
-  font-size: 16px;
-
-  &:focus {
-    box-shadow: 0 0 0 2px ${colors.primary[500]};
-  }
-`;
-
-const PostEditActions = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-  justify-content: flex-end;
-  width: 100%;
-`;
-
-const PostEditCancelButton = styled.button`
-  padding: 8px 14px;
-  border: 1px solid ${colors.gray[200]};
-  background-color: ${colors.gray[0]};
+const CategoryLabel = styled.span`
+  display: inline-block;
+  position: absolute;
+  top: 50px;
+  left: 740px;
+  font-size: 14px;
+  background-color: ${colors.gray[50]};
   color: ${colors.gray[700]};
-  font: inherit;
-  border-radius: 12px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${colors.gray[50]};
-  }
+  border-radius: 10px;
+  padding: 10px 16px;
 `;
 
 const ReactionBar = styled.div`
@@ -239,30 +208,16 @@ const ReactionBar = styled.div`
   padding-bottom: 8px;
 `;
 
-const LikeArea = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  flex-shrink: 0;
-`;
-const LikeButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
 const LikeCount = styled.span`
   font-size: 20px;
   font-weight: 500;
   padding-top: 3px;
 `;
 
-const LikeError = styled.span`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${colors.red[600]};
-  white-space: normal;
+const LikeButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
 const CommentInfo = styled.div`
@@ -307,14 +262,6 @@ const CommentHeader = styled.header`
   padding-left: 10px;
 `;
 
-const CommentAuthor = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  font-size: 16px;
-  font-weight: 700;
-`;
-
 const CommentProfile = styled.img`
   width: 45px;
   height: 45px;
@@ -325,6 +272,26 @@ const CommentProfile = styled.img`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+`;
+
+const CommentAuthor = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 16px;
+  font-weight: 700;
+`;
+
+const CommentBody = styled.p`
+  padding-top: 7px;
+  padding-left: 13px;
+  font-size: 18px;
+`;
+
+const CommentDateCreatedAt = styled.p`
+  font-size: 18px;
+  color: ${colors.gray[500]};
+  font-weight: 500;
 `;
 
 const CommentDefaultProfileImage = styled.div`
@@ -339,16 +306,38 @@ const CommentDefaultProfileImage = styled.div`
   flex-shrink: 0;
 `;
 
-const CommentDateCreatedAt = styled.p`
-  font-size: 18px;
-  color: ${colors.gray[500]};
-  font-weight: 500;
+const PostMenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 `;
 
-const CommentBody = styled.p`
-  padding-top: 7px;
-  padding-left: 13px;
-  font-size: 18px;
+const KebabIcon = styled.img`
+  width: 16px;
+  height: 16px;
+  display: block;
+`;
+
+const ReportPopoverLink = styled.a`
+  display: block;
+  position: absolute;
+  z-index: 10;
+  background-color: ${colors.gray[0]};
+  box-shadow: 0.1px 0.1px 0.1px 1px ${colors.gray[1000]};
+  border-radius: 10px;
+  width: 209px;
+  padding: 20px 123px 20px 16px;
+
+  top: 75px;
+  right: 45px;
+
+  &:hover {
+    background-color: ${colors.red[50]};
+    color: ${colors.red[600]};
+  }
 `;
 
 const CommentMenuArea = styled.div`
@@ -441,178 +430,157 @@ const CommentEditButton = styled.button`
   }
 `;
 
-const CommentEditArea = styled.div`
+const PostMenuPopover = styled.div`
+  position: absolute;
+  z-index: 20;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px;
+  width: 200px;
+  padding: 6px;
+  background-color: ${colors.gray[0]};
+  border: 1px solid ${colors.gray[200]};
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px ${colors.alpha.black12};
+  top: calc(100% + 8px);
+  right: 5px;
 `;
 
-const CommentEditTextarea = styled.textarea`
-  width: 100%;
-  min-height: 80px;
-  padding: 12px;
-  border: 1px solid ${colors.gray[200]};
+const PostMenuArea = styled.div`
+  position: relative;
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+`;
+
+const PostEditForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 35px;
+`;
+
+const PostEditTitleInput = styled.input`
   box-sizing: border-box;
+  width: 100%;
+  font-size: 24px;
+  padding: 10px;
+  font-weight: 600;
+  border: 1px solid ${colors.gray[200]};
   border-radius: 8px;
-  font: inherit;
-  resize: none;
+  background-color: ${colors.gray[0]};
+  outline: none;
   &:focus {
-    border-color: ${colors.primary[500]};
-    outline: none;
+    border: 1px solid ${colors.primary[500]};
   }
 `;
 
-const CommentEditActions = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 8px;
+const PostEditContentTextarea = styled.textarea`
   width: 100%;
+  min-height: 180px;
+  box-sizing: border-box;
+  padding: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+  font-family: inherit;
+  border: 1px solid ${colors.gray[200]};
+  border-radius: 8px;
+  background-color: ${colors.gray[0]};
+  outline: none;
+  &:focus {
+    border: 1px solid ${colors.primary[500]};
+  }
+  resize: vertical;
 `;
 
-const CommentEditCancelButton = styled.button`
+const PostEditActions = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 4px;
+`;
+
+const PostEditCancelButton = styled.button`
   padding: 8px 14px;
   border: 1px solid ${colors.gray[200]};
   background-color: ${colors.gray[0]};
   color: ${colors.gray[700]};
+  border-radius: 8px;
   font: inherit;
-  border-radius: 12px;
   cursor: pointer;
-
   &:hover {
     background-color: ${colors.gray[50]};
   }
 `;
 
-const CommentEditSaveButton = styled.button`
+const PostEditSaveButton = styled.button`
   padding: 8px 14px;
   border: none;
   background-color: ${colors.primary[500]};
   color: ${colors.gray[0]};
-  border-radius: 12px;
+  border-radius: 8px;
   font: inherit;
   cursor: pointer;
 
-  &:hover:not(:disabled) {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
     background-color: ${colors.primary[600]};
-  }
-
-  &:disabled {
-    background-color: ${colors.primary[300]};
-    cursor: not-allowed;
-  }
-`;
-
-const CommentForm = styled.form`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  width: 100%;
-  padding: 16px 18px;
-  border-top: 1px solid ${colors.gray[200]};
-  box-sizing: border-box;
-  background-color: ${colors.gray[0]};
-
-  z-index: 20;
-  flex-shrink: 0;
-`;
-
-const CommentInput = styled.input`
-  flex: 1;
-  height: 42px;
-  padding: 0 16px;
-
-  border: none;
-  border-radius: 999px;
-  outline: none;
-
-  background-color: ${colors.gray[100]};
-  color: ${colors.gray[950]};
-  font-size: 16px;
-
-  &::placeholder {
-    color: ${colors.gray[600]};
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 2px ${colors.primary[500]};
-  }
-`;
-
-const CommentSubmitButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-
-  color: ${colors.gray[950]};
-
-  &:disabled {
-    color: ${colors.gray[400]};
-    cursor: not-allowed;
   }
 `;
 
 const PostDetailModalStyles = {
   DetailDialog,
-  ModalScrollArea,
   CloseButton,
-  DetailContent,
-  CategoryLabel,
   PostHeader,
   ProfileImage,
-  DefaultProfileImage,
+  PostTitle,
+  PostContent,
+  ContentImage,
+  DetailContent,
   WriterInfo,
   WriterName,
   PostMeta,
-  PostMenuArea,
-  PostMenuButton,
-  KebabIcon,
-  PostMenuPopover,
-  ReportPopoverLink,
-  PostTitle,
-  PostContent,
+  DefaultProfileImage,
   ImageList,
-  ContentImage,
-  PostEditForm,
-  PostEditTitleInput,
-  PostEditActions,
-  PostEditCancelButton,
+  CategoryLabel,
   ReactionBar,
-  LikeArea,
-  LikeButton,
   LikeCount,
-  LikeError,
+  LikeButton,
   CommentInfo,
   CommentImage,
   CommentCount,
   CommentList,
   CommentItem,
   CommentHeader,
-  CommentAuthor,
   CommentProfile,
-  CommentDefaultProfileImage,
-  CommentDateCreatedAt,
+  CommentAuthor,
   CommentBody,
+  CommentDateCreatedAt,
+  CommentDefaultProfileImage,
+  PostMenuButton,
+  KebabIcon,
+  ReportPopoverLink,
   CommentMenuArea,
   CommentButton,
   CommentMenuPopover,
   CommentMenuPopoverLink,
   CommentDeleteButton,
   CommentEditButton,
-  CommentEditArea,
-  CommentEditTextarea,
-  CommentEditActions,
-  CommentEditCancelButton,
-  CommentEditSaveButton,
-  CommentForm,
-  CommentInput,
-  CommentSubmitButton,
+  PostMenuPopover,
+  PostMenuArea,
+  ModalScrollArea,
+  PostEditForm,
+  PostEditTitleInput,
+  PostEditContentTextarea,
+  PostEditActions,
+  PostEditCancelButton,
+  PostEditSaveButton,
 };
 
 export default PostDetailModalStyles;
