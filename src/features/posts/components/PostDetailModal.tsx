@@ -138,6 +138,7 @@ function PostDetailModal({
     }
   }, []);
 
+  // post.id가 마운트 될 때 댓글 목록을 불러오는 코드
   useEffect(() => {
     async function fetchComments() {
       setIsCommentLoading(true);
@@ -155,6 +156,7 @@ function PostDetailModal({
     fetchComments();
   }, [post.id]);
 
+  //게시글 수정 저장 함수 로직 
   async function handlePostEditSave() {
     const trimmedPostTitle = editingPostTitle.trim();
     const trimmedPostContent = editingPostContent.trim();
@@ -179,6 +181,8 @@ function PostDetailModal({
       setPostUpdateError(" 게시물을 수정하는데 실패하였습니다. ");
     }
   }
+
+
   return (
     <S.DetailDialog
       ref={dialogRef}

@@ -50,6 +50,7 @@ function MarkdownEditor({
     },
   });
 
+  //외부 Markdown 값이 바뀔 때 에디터 내용을 동기화하는 useEffect
   useEffect(() => {
     if (!editor || value === latestValueRef.current) {
       return;
@@ -62,6 +63,7 @@ function MarkdownEditor({
     latestValueRef.current = value;
   }, [editor, value]);
 
+  //disabled 상태를 에디터에 반영하는 useEffect
   useEffect(() => {
     editor?.setEditable(!disabled);
   }, [editor, disabled]);
@@ -70,14 +72,17 @@ function MarkdownEditor({
     return null;
   }
 
+  //링크 입력 처리
   function handleLink() {
     const previousUrl = editor.getAttributes("link").href as string | undefined;
-    const url = window.prompt("링크 주소를 입력해주세요.", previousUrl ?? "https://");
+    const url = window.prompt(
+      "링크 주소를 입력해주세요.",
+      previousUrl ?? "https://",
+    );
 
     if (url === null) {
       return;
     }
-
     if (url.trim() === "") {
       editor.chain().focus().unsetLink().run();
       return;
@@ -86,6 +91,7 @@ function MarkdownEditor({
     editor.chain().focus().setLink({ href: url.trim() }).run();
   }
 
+  //이미지 URL 입력 처리
   function handleImage() {
     const imageUrl = window.prompt("이미지 URL을 입력해주세요.");
 

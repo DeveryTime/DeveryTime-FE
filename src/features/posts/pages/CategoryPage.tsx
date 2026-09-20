@@ -94,6 +94,7 @@ function CategoryPage({ categoryId, categoryName }: CategoryPageProps) {
     }
   }
 
+  //게시글 삭제 함수
   async function handlePostDelete(postId: number) {
     try {
       await deletePost(postId);
@@ -107,6 +108,7 @@ function CategoryPage({ categoryId, categoryName }: CategoryPageProps) {
     }
   }
 
+  //수정 성공한 후에 상태 갱신하는 로직
   function handlePostUpdate(postId: number, title: string, content: string) {
     setPosts((currentPage) =>
       currentPage.map((currentPost) =>
