@@ -1,28 +1,37 @@
 import {
-  logoName,
+  cateGory,
+  login,
   logo,
-  navStyle,
+  logoName,
+  navCatalog,
   navGap,
+  navStyle,
   search,
   searchIcon,
   searchInput,
-  login,
-  cateGory,
-  navCatalog,
 } from "./nav-bar.styles";
-
 import logoIcon from "../../icons/logoIcon.svg";
 import profile from "../../icons/profile.svg";
 
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const [signUp, setSignUp] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage] = useState("");
 
   const navigate = useNavigate();
+
+  const CATEGORIES = [
+    { id: 1, name: "전공" },
+    { id: 2, name: "일상" },
+    { id: 3, name: "교과" },
+    { id: 4, name: "급식" },
+    { id: 5, name: "프로젝트" },
+    { id: 6, name: "기숙사" },
+    { id: 7, name: "분실물" },
+  ];
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -57,15 +66,16 @@ const NavBar = () => {
     if (!searchValue.trim()) return;
 
     navigate(`/search?keyword=${encodeURIComponent(searchValue)}`);
+    setSearchValue("");
   };
 
   return (
     <nav css={navStyle}>
       <div css={navGap}>
-        <div css={logo}>
+        <Link to="main" css={logo}>
           <img src={logoIcon} alt="Devery time 로고" />
           <div css={logoName}>Devery time</div>
-        </div>
+        </Link>
 
         <div css={search}>
           <input
@@ -92,6 +102,7 @@ const NavBar = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="lucide lucide-search-icon lucide-search"
             aria-hidden="true"
             onClick={handleSearch}
           >
@@ -103,20 +114,19 @@ const NavBar = () => {
 
       <div css={navCatalog}>
         <div css={cateGory}>
-          <div>전공</div>
-          <div>일상</div>
-          <div>교과</div>
-          <div>급식</div>
-          <div>프로젝트</div>
-          <div>기숙사</div>
-          <div>분실물</div>
+          {CATEGORIES.map((category) => (
+            <Link key={category.id} to={`/category/${category.id}`}>
+              {category.name}
+            </Link>
+          ))}
         </div>
-
         <div>
           {signUp ? (
             <img src={profileImage || profile} alt="프로필" />
           ) : (
-            <button css={login}>로그인</button>
+            <Link to={"/login"}>
+              <button css={login}>로그인</button>
+            </Link>
           )}
         </div>
       </div>
