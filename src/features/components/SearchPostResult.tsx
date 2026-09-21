@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-import { colors } from "../../designToken/colors";
+import {
+  FiChevronLeft,
+  FiChevronRight,
+  FiChevronsLeft,
+  FiChevronsRight,
+} from "react-icons/fi";
 
 export interface SearchPostResultItem {
   id: number;
@@ -45,54 +50,48 @@ export function SearchPostResult({
   }
 
   return (
-    <Container>
-      <TableWrapper>
-        <PostTable>
-          <thead>
-            <tr>
-              <NumberHeader>번호</NumberHeader>
-              <CategoryHeader>카테고리</CategoryHeader>
-              <TitleHeader>제목</TitleHeader>
-              <DateHeader>작성일</DateHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post, index) => (
-              <TableRow key={post.id}>
-                <NumberCell>{(currentPage - 1) * pageSize + index + 1}</NumberCell>
-                <CategoryCell>{post.categoryName}</CategoryCell>
-                <TitleCell>
-                  {onPostClick ? (
-                    <TitleButton type="button" onClick={() => onPostClick(post.id)}>
-                      {post.title}
-                    </TitleButton>
-                  ) : (
-                    post.title
-                  )}
-                </TitleCell>
-                <DateCell>{formatDate(post.createdAt)}</DateCell>
-              </TableRow>
-            ))}
-          </tbody>
-        </PostTable>
-      </TableWrapper>
+    <>
+      <Table>
+        <thead>
+          <tr>
+            <TableHeader>번호</TableHeader>
+            <TableHeader>카테고리</TableHeader>
+            <TableHeader>제목</TableHeader>
+            <TableHeader>작성일</TableHeader>
+          </tr>
+        </thead>
+        <tbody>
+          {posts.map((post, index) => (
+            <TableRow
+              key={post.id}
+              onClick={() => onPostClick?.(post.id)}
+              $isClickable={Boolean(onPostClick)}
+            >
+              <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
+              <TableCell>{post.categoryName}</TableCell>
+              <TableCell>{post.title}</TableCell>
+              <TableCell>{formatDate(post.createdAt)}</TableCell>
+            </TableRow>
+          ))}
+        </tbody>
+      </Table>
 
-      <Pagination aria-label="검색 결과 페이지">
+      <Pagination aria-label="검색 결과 페이지 이동">
         <PageButton
           type="button"
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          aria-label="첫 페이지"
+          aria-label="첫 페이지로 이동"
         >
-          «
+          <FiChevronsLeft aria-hidden="true" />
         </PageButton>
         <PageButton
           type="button"
-          onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+          onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           aria-label="이전 페이지"
         >
-          ‹
+          <FiChevronLeft aria-hidden="true" />
         </PageButton>
 
         {pageNumbers.map((page) => (
@@ -100,8 +99,7 @@ export function SearchPostResult({
             key={page}
             type="button"
             onClick={() => onPageChange(page)}
-            $isActive={page === currentPage}
-            aria-current={page === currentPage ? "page" : undefined}
+            aria-current={currentPage === page ? "page" : undefined}
           >
             {page}
           </PageButton>
@@ -109,129 +107,113 @@ export function SearchPostResult({
 
         <PageButton
           type="button"
-          onClick={() => onPageChange(Math.min(safeTotalPages, currentPage + 1))}
+          onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === safeTotalPages}
           aria-label="다음 페이지"
         >
-          ›
+          <FiChevronRight aria-hidden="true" />
         </PageButton>
         <PageButton
           type="button"
           onClick={() => onPageChange(safeTotalPages)}
           disabled={currentPage === safeTotalPages}
-          aria-label="마지막 페이지"
+          aria-label="마지막 페이지로 이동"
         >
-          »
+          <FiChevronsRight aria-hidden="true" />
         </PageButton>
       </Pagination>
-    </Container>
+    </>
   );
 }
 
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-`;
-
-const TableWrapper = styled.div`
-  overflow-x: auto;
-`;
-
-const PostTable = styled.table`
+const Table = styled.table`
   width: 100%;
-  min-width: 620px;
+  height: auto;
+  table-layout: fixed;
   border-collapse: collapse;
-  border-top: 2px solid ${colors.blue[500]};
-  color: #252525;
-`;
+  background-color: #ffffff;
 
-const NumberHeader = styled.th`
-  width: 72px;
-`;
+  th:nth-of-type(1),
+  td:nth-of-type(1) {
+    width: 12%;
+    padding-left: 16px;
+  }
 
-const CategoryHeader = styled.th`
-  width: 120px;
-`;
+  th:nth-of-type(2),
+  td:nth-of-type(2) {
+    width: 20%;
+  }
 
-const TitleHeader = styled.th`
-  text-align: left;
-`;
+  th:nth-of-type(3),
+  td:nth-of-type(3) {
+    width: 48%;
+  }
 
-const DateHeader = styled.th`
-  width: 120px;
-`;
-
-const TableRow = styled.tr`
-  border-bottom: 1px solid #e5e7eb;
-
-  &:hover {
-    background-color: ${colors.blue[50]};
+  th:nth-of-type(4),
+  td:nth-of-type(4) {
+    width: 20%;
   }
 `;
 
-const NumberCell = styled.td`
-  padding: 18px 8px;
-  text-align: center;
-  color: #6b7280;
-`;
-
-const CategoryCell = styled.td`
-  padding: 18px 8px;
-  text-align: center;
-  color: #4b5563;
-`;
-
-const TitleCell = styled.td`
-  padding: 18px 16px;
+const TableHeader = styled.th`
+  padding: 6px 8px;
+  border-top: 3px solid #000000;
+  text-align: left;
   font-weight: 500;
 `;
 
-const DateCell = styled.td`
-  padding: 18px 8px;
-  text-align: center;
-  color: #6b7280;
-  font-size: 14px;
+const TableCell = styled.td`
+  padding: 8px;
+  border: none;
+  text-align: left;
 `;
 
-const TitleButton = styled.button`
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  font: inherit;
-  text-align: left;
+const TableRow = styled.tr<{ $isClickable: boolean }>`
+  cursor: ${({ $isClickable }) => ($isClickable ? "pointer" : "default")};
 
   &:hover {
-    color: ${colors.blue[500]};
-    text-decoration: underline;
+    background-color: #f5f5f5;
   }
 `;
 
 const Pagination = styled.nav`
+  width: 360px;
+  height: 22px;
+
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
+
+  margin: 32px auto 0;
+  transform: translateX(-80px);
 `;
 
-const PageButton = styled.button<{ $isActive?: boolean }>`
-  min-width: 32px;
-  height: 32px;
-  border: 1px solid ${({ $isActive }) => ($isActive ? colors.blue[500] : "#d1d5db")};
-  border-radius: 6px;
-  background-color: ${({ $isActive }) => ($isActive ? colors.blue[500] : "#ffffff")};
-  color: ${({ $isActive }) => ($isActive ? "#ffffff" : "#374151")};
-  cursor: pointer;
+const PageButton = styled.button`
+  width: 22px;
+  height: 22px;
+  padding: 0;
 
-  &:not(:disabled):hover {
-    border-color: ${colors.blue[500]};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #000000;
+  font-size: 16px;
+  line-height: 1;
+
+  &:hover:not(:disabled) {
+    color: #577aed;
+  }
+
+  &[aria-current="page"] {
+    color: #577aed;
+    font-weight: 700;
   }
 
   &:disabled {
+    color: #b0b0b0;
     cursor: not-allowed;
-    opacity: 0.4;
   }
 `;
 
