@@ -17,8 +17,6 @@ const DetailDialog = styled.dialog`
   &::backdrop {
     background-color: ${colors.alpha.black45};
   }
-
-  display: grid;
   &[open] {
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
@@ -323,20 +321,18 @@ const KebabIcon = styled.img`
 
 const ReportPopoverLink = styled.a`
   display: block;
-  position: absolute;
-  z-index: 10;
-  background-color: ${colors.gray[0]};
-  box-shadow: 0.1px 0.1px 0.1px 1px ${colors.gray[1000]};
-  border-radius: 10px;
-  width: 209px;
-  padding: 20px 123px 20px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
 
-  top: 75px;
-  right: 45px;
+  color: ${colors.gray[950]};
+  text-align: left;
+  white-space: nowrap;
+  border-radius: 6px;
 
   &:hover {
-    background-color: ${colors.red[50]};
     color: ${colors.red[600]};
+    background-color: ${colors.red[50]};
   }
 `;
 

@@ -22,7 +22,18 @@ function PostTable({ posts, onPostClick }: PostTableProps) {
       <tbody>
         {posts.map((post) => (
           // 행을 클릭하면 선택한 게시글의 ID를 부모 컴포넌트에 전달한다.
-          <G.TableRow key={post.id} onClick={() => onPostClick(post.id)} >
+          <G.TableRow
+            key={post.id}
+            onClick={() => onPostClick(post.id)}
+            tabIndex={0}
+            role="button"
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key == "") {
+                event.preventDefault();
+                onPostClick(post.id);
+              }
+            }}
+          >
             <G.TableCell> {post.number} </G.TableCell>
             <G.TableCell> {post.category} </G.TableCell>
             <G.TableCell> {post.title} </G.TableCell>
