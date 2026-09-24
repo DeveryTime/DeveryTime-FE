@@ -23,5 +23,4 @@ export const colors = {
     800: "#01248b",
     900: "#001c6a",
   },
-  red: {},
 };
