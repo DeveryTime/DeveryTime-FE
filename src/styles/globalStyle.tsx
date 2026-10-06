@@ -1,6 +1,8 @@
 import { Global, css } from "@emotion/react";
+import colors from "./tokens/colors";
 
-export const GlobalStyle = () => (
+// 앱 전체에 적용되는 초기화 및 공통 기본 스타일이다.
+const GlobalStyle = () => (
   <Global
     styles={css`
       * {
@@ -11,6 +13,7 @@ export const GlobalStyle = () => (
 
       body {
         font-family: Pretendard, sans-serif;
+        background-color: ${colors.gray[50]};
       }
 
       a {
@@ -26,3 +29,5 @@ export const GlobalStyle = () => (
     `}
   />
 );
+
+export default GlobalStyle;
